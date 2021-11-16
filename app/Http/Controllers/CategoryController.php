@@ -14,7 +14,13 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::where('parent_id', false)->get();
+
+        foreach ($categories as $category) :
+            $category->child_categories = Category::where('parent_id', $category->id)->get();
+        endforeach;
+
+        return $categories;
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Filters\ProductFilter;
+use App\Http\Requests\FilterRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -12,9 +14,13 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $count = $request->query('count') ?: 9;
+
+        $products = Product::paginate($count);
+
+        return $products;
     }
 
     /**
@@ -81,5 +87,16 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+    }
+
+    public function search(FilterRequest $request)
+    {
+        $query = $request->validated();
+        //dd($query);
+        $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($query)]);
+
+        $products = Product::filter($filter)->paginate(9);
+
+        return $products;
     }
 }

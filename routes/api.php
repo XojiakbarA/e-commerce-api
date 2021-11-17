@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
@@ -25,5 +26,6 @@ Route::get('/products/search', [ProductController::class, 'search']);
 Route::apiResources([
     'categories' => CategoryController::class,
     'brands' => BrandController::class,
-    'products' => ProductController::class
+    'products' => ProductController::class,
+    'banners' => BannerController::class
 ]);

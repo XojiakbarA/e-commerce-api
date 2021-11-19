@@ -11,6 +11,7 @@ class ProductFilter extends AbstractFilter
     public const BRAND_ID = 'brand_id';
     public const RATING = 'rating';
     public const AVAIL = 'avail';
+    public const ORDER = 'order';
 
     protected function getCallbacks(): array
     {
@@ -19,7 +20,8 @@ class ProductFilter extends AbstractFilter
             self::CATEGORY_ID => [$this, 'categoryId'],
             self::BRAND_ID => [$this, 'brandId'],
             self::RATING => [$this, 'rating'],
-            self::AVAIL => [$this, 'avail']
+            self::AVAIL => [$this, 'avail'],
+            self::ORDER => [$this, 'order']
         ];
     }
 
@@ -50,5 +52,12 @@ class ProductFilter extends AbstractFilter
         endif;
 
         $builder->get();
+    }
+
+    public function order(Builder $builder, $value)
+    {
+        if ($value == 'new') :
+            $builder->orderBy('created_at', 'DESC')->get();
+        endif;
     }
 }

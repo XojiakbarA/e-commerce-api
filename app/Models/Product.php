@@ -10,4 +10,14 @@ class Product extends Model
 {
     use HasFactory;
     use Filterable;
+
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class);
+    }
+
+    public function image()
+    {
+        return $this->hasOne(ProductImage::class)->ofMany('main', 'max');
+    }
 }

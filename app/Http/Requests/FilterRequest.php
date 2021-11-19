@@ -28,7 +28,8 @@ class FilterRequest extends FormRequest
             'category_id' => 'integer',
             'brand_id' => 'integer',
             'rating' => 'integer',
-            'avail' => 'boolean'
+            'avail' => 'boolean',
+            'order' => 'string'
         ];
     }
 }

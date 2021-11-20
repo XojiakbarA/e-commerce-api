@@ -55,9 +55,17 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
-    }
+        return $product->load(
+            [
+                'category',
+                'brand',
+                'images' => function ($query) {
+                    $query->where('main', false);
+                }
 
+            ]
+        );
+    }
     /**
      * Show the form for editing the specified resource.
      *

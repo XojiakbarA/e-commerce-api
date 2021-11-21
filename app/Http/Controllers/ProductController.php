@@ -6,7 +6,10 @@ use App\Http\Filters\ProductFilter;
 use App\Http\Requests\FilterRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Models\ProductImage;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use function PHPUnit\Framework\isEmpty;
 
 class ProductController extends Controller
 {
@@ -20,7 +23,7 @@ class ProductController extends Controller
         $query = $request->validated();
         $count = $request->query('count') ?: 9;
         $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($query)]);
-        $products = Product::filter($filter)->paginate($count);
+        $products = Product::filter($filter)->with('image')->paginate($count);
 
         return ProductResource::collection($products);
     }
@@ -54,16 +57,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return $product->load(
-            [
-                'category',
-                'brand',
-                'images' => function ($query) {
-                    $query->where('main', false);
-                }
-
-            ]
-        );
+        return new ProductResource($product->load('images'));
     }
     /**
      * Show the form for editing the specified resource.

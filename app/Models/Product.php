@@ -23,11 +23,14 @@ class Product extends Model
 
     public function images()
     {
-        return $this->hasMany(ProductImage::class);
+        return $this->hasMany(ProductImage::class)
+                    ->where('main', false);
     }
 
     public function image()
     {
-        return $this->hasOne(ProductImage::class)->ofMany('main', 'max');
+        return $this->hasOne(ProductImage::class)
+                    ->where('main', true)
+                    ->withDefault(['src' => 'no_image.jpeg']);
     }
 }

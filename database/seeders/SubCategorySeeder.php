@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class SubcategorySeeder extends Seeder
+class SubCategorySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,9 +15,9 @@ class SubcategorySeeder extends Seeder
     public function run()
     {
         for ($i = 1; $i < 21; $i++) :
-            DB::table('categories')->insert([
+            DB::table('sub_categories')->insert([
                 'title' => 'Subcategory ' . $i,
-                'parent_id' => rand(1, 6)
+                'category_id' => rand(1, 6)
             ]);
         endfor;
     }

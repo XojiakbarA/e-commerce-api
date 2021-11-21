@@ -11,9 +11,9 @@ class Product extends Model
     use HasFactory;
     use Filterable;
 
-    public function category()
+    public function subCategory()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(SubCategory::class);
     }
 
     public function brand()

@@ -99,15 +99,4 @@ class ProductController extends Controller
     {
         //
     }
-
-    public function search(FilterRequest $request)
-    {
-        $query = $request->validated();
-
-        $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($query)]);
-
-        $products = Product::filter($filter)->paginate(9);
-
-        return $products;
-    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -14,13 +15,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::where('parent_id', false)->get();
+        $categories = Category::all();
 
-        foreach ($categories as $category) :
-            $category->child_categories = Category::where('parent_id', $category->id)->get();
-        endforeach;
-
-        return $categories;
+        return CategoryResource::collection($categories);
     }
 
     /**

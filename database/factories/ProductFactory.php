@@ -18,7 +18,7 @@ class ProductFactory extends Factory
             'price' => $this->faker->numberBetween(30, 1200),
             'rating' => $this->faker->numberBetween(1, 5),
             'avail' => $this->faker->numberBetween(0, 1),
-            'category_id' => $this->faker->numberBetween(7, 26),
+            'sub_category_id' => $this->faker->numberBetween(1, 20),
             'brand_id' => $this->faker->numberBetween(1, 8)
         ];
     }

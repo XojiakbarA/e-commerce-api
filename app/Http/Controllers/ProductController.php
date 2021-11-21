@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Filters\ProductFilter;
 use App\Http\Requests\FilterRequest;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -19,11 +20,9 @@ class ProductController extends Controller
         $query = $request->validated();
         $count = $request->query('count') ?: 9;
         $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($query)]);
-        $products = Product::filter($filter)
-                    ->with('image')
-                    ->paginate($count);
+        $products = Product::filter($filter)->paginate($count);
 
-        return $products;
+        return ProductResource::collection($products);
     }
 
     /**

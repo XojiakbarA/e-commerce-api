@@ -23,7 +23,7 @@ class ProductController extends Controller
         $query = $request->validated();
         $count = $request->query('count') ?: 9;
         $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($query)]);
-        $products = Product::filter($filter)->with('image')->paginate($count);
+        $products = Product::filter($filter)->with('image')->paginate($count)->withQueryString();
 
         return ProductResource::collection($products);
     }

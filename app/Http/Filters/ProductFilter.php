@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 class ProductFilter extends AbstractFilter
 {
     public const TITLE = 'title';
-    public const CATEGORY_ID = 'category_id';
+    public const CAT_ID = 'cat_id';
     public const BRAND_ID = 'brand_id';
     public const RATING = 'rating';
     public const AVAIL = 'avail';
@@ -17,7 +17,7 @@ class ProductFilter extends AbstractFilter
     {
         return [
             self::TITLE => [$this, 'title'],
-            self::CATEGORY_ID => [$this, 'categoryId'],
+            self::CAT_ID => [$this, 'catId'],
             self::BRAND_ID => [$this, 'brandId'],
             self::RATING => [$this, 'rating'],
             self::AVAIL => [$this, 'avail'],
@@ -27,12 +27,19 @@ class ProductFilter extends AbstractFilter
 
     public function title(Builder $builder, $value)
     {
+        if ($value == 'all') :
+            return;
+        endif;
         $builder->where('title', 'like', '%' . $value . '%');
     }
 
-    public function categoryId(Builder $builder, $value)
+    public function catId(Builder $builder, $value, $value2)
     {
-        $builder->where('category_id', $value);
+        if ($value2['is_sub'] == 'yes') :
+            $builder->where('sub_category_id', $value);
+        else :
+            $builder->whereRelation('subCategory.category', 'id', $value);
+        endif;
     }
 
     public function brandId(Builder $builder, $value)

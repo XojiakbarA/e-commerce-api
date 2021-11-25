@@ -6,10 +6,7 @@ use App\Http\Filters\ProductFilter;
 use App\Http\Requests\FilterRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
-use App\Models\ProductImage;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use function PHPUnit\Framework\isEmpty;
 
 class ProductController extends Controller
 {
@@ -57,7 +54,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return new ProductResource($product->load('images'));
+        return new ProductResource($product->load(['images']));
     }
     /**
      * Show the form for editing the specified resource.

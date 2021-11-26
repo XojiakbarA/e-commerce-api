@@ -8,6 +8,7 @@ class ProductFilter extends AbstractFilter
 {
     public const TITLE = 'title';
     public const CAT_ID = 'cat_id';
+    public const SUB_CAT_ID = 'sub_cat_id';
     public const BRAND_ID = 'brand_id';
     public const RATING = 'rating';
     public const AVAIL = 'avail';
@@ -18,6 +19,7 @@ class ProductFilter extends AbstractFilter
         return [
             self::TITLE => [$this, 'title'],
             self::CAT_ID => [$this, 'catId'],
+            self::SUB_CAT_ID => [$this, 'subCatId'],
             self::BRAND_ID => [$this, 'brandId'],
             self::RATING => [$this, 'rating'],
             self::AVAIL => [$this, 'avail'],
@@ -33,13 +35,14 @@ class ProductFilter extends AbstractFilter
         $builder->where('title', 'like', '%' . $value . '%');
     }
 
-    public function catId(Builder $builder, $value, $value2)
+    public function catId(Builder $builder, $value)
     {
-        if ($value2['is_sub'] == 'yes') :
-            $builder->where('sub_category_id', $value);
-        else :
-            $builder->whereRelation('subCategory.category', 'id', $value);
-        endif;
+        $builder->whereRelation('subCategory.category', 'id', $value);
+    }
+
+    public function subCatId(Builder $builder, $value)
+    {
+        $builder->where('sub_category_id', $value);
     }
 
     public function brandId(Builder $builder, $value)

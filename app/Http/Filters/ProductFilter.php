@@ -68,6 +68,10 @@ class ProductFilter extends AbstractFilter
     {
         if ($value == 'new') :
             $builder->latest();
+        elseif ($value == 'expensive') :
+            $builder->orderBy('price', 'desc');
+        elseif ($value == 'cheap') :
+            $builder->orderBy('price');
         endif;
     }
 }

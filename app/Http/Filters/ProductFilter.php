@@ -62,7 +62,12 @@ class ProductFilter extends AbstractFilter
 
     public function rating(Builder $builder, $value)
     {
-        $builder->where('rating', $value);
+        $arr = explode(',', $value);
+        $res = array_filter($arr, function ($id) { return $id > 0; });
+
+        if (empty($res)) return;
+
+        $builder->whereIn('rating', $arr);
     }
 
     public function avail(Builder $builder, $value)

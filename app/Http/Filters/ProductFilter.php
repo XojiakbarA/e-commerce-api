@@ -13,6 +13,8 @@ class ProductFilter extends AbstractFilter
     public const RATING = 'rating';
     public const AVAIL = 'avail';
     public const SORT = 'sort';
+    public const PRICE_MIN = 'price_min';
+    public const PRICE_MAX = 'price_max';
 
     protected function getCallbacks(): array
     {
@@ -23,7 +25,9 @@ class ProductFilter extends AbstractFilter
             self::BRAND_ID => [$this, 'brandId'],
             self::RATING => [$this, 'rating'],
             self::AVAIL => [$this, 'avail'],
-            self::SORT => [$this, 'sort']
+            self::SORT => [$this, 'sort'],
+            self::PRICE_MIN => [$this, 'priceMin'],
+            self::PRICE_MAX => [$this, 'priceMax']
         ];
     }
 
@@ -73,5 +77,15 @@ class ProductFilter extends AbstractFilter
         elseif ($value == 'cheap') :
             $builder->orderBy('price');
         endif;
+    }
+
+    public function priceMin(Builder $builder, $value)
+    {
+        $builder->where('price', '>', $value);
+    }
+
+    public function priceMax(Builder $builder, $value)
+    {
+        $builder->where('price', '<', $value);
     }
 }

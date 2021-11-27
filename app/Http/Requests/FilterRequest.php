@@ -30,7 +30,9 @@ class FilterRequest extends FormRequest
             'brand_id' => 'integer',
             'rating' => 'integer',
             'avail' => 'boolean',
-            'sort' => 'string'
+            'sort' => 'string',
+            'price_min' => 'integer',
+            'price_max' => 'integer'
         ];
     }
 }

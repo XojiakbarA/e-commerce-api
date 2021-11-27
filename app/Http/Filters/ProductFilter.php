@@ -51,7 +51,13 @@ class ProductFilter extends AbstractFilter
 
     public function brandId(Builder $builder, $value)
     {
-        $builder->where('brand_id', $value);
+        $arr = explode(',', $value);
+        $res = array_filter($arr, function ($id) { return $id > 0; });
+
+        if (empty($res)) return;
+
+        $builder->whereIn('brand_id', $arr);
+
     }
 
     public function rating(Builder $builder, $value)

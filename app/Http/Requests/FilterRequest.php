@@ -27,7 +27,7 @@ class FilterRequest extends FormRequest
             'title' => 'string|min:3',
             'cat_id' => 'integer',
             'sub_cat_id' => 'integer',
-            'brand_id' => 'integer',
+            'brand_id' => 'string',
             'rating' => 'integer',
             'avail' => 'boolean',
             'sort' => 'string',

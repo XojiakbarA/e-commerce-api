@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
@@ -29,3 +30,8 @@ Route::apiResources([
     'products' => ProductController::class,
     'banners' => BannerController::class
 ]);
+
+Route::get('/cart', [CartController::class, 'get']);
+Route::post('/cart/{id}', [CartController::class, 'add']);
+Route::put('/cart/{id}', [CartController::class, 'remove']);
+Route::delete('/cart/{id}', [CartController::class, 'delete']);

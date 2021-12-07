@@ -5,6 +5,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,7 +29,8 @@ Route::apiResources([
     'categories' => CategoryController::class,
     'brands' => BrandController::class,
     'products' => ProductController::class,
-    'banners' => BannerController::class
+    'banners' => BannerController::class,
+    'reviews' => ReviewController::class
 ]);
 
 Route::get('/cart', [CartController::class, 'get']);

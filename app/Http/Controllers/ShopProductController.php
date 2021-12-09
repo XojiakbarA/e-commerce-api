@@ -2,21 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ShopResource;
+use App\Http\Filters\ProductFilter;
+use App\Http\Requests\FilterRequest;
+use App\Http\Resources\ProductResource;
+use App\Models\Product;
 use App\Models\Shop;
 use Illuminate\Http\Request;
 
-class ShopController extends Controller
+class ShopProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(FilterRequest $request, Shop $shop)
     {
-        $shop = Shop::paginate(9);
-        return ShopResource::collection($shop);
+        $query = $request->validated();
+        $count = $request->query('count') ?: 9;
+        $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($query)]);
+
+        $products = Product::filter($filter)->where('shop_id', $shop->id)->with('image')->paginate($count)->withQueryString();
+
+        return ProductResource::collection($products);
     }
 
     /**
@@ -43,21 +51,21 @@ class ShopController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Shop  $shop
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Shop $shop)
+    public function show($id)
     {
-        return new ShopResource($shop);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Shop  $shop
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Shop $shop)
+    public function edit($id)
     {
         //
     }
@@ -66,10 +74,10 @@ class ShopController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Shop  $shop
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Shop $shop)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -77,10 +85,10 @@ class ShopController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Shop  $shop
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Shop $shop)
+    public function destroy($id)
     {
         //
     }

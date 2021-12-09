@@ -24,6 +24,7 @@ class ProductResource extends JsonResource
             'category' => new CategoryResource($this->subCategory->category),
             'sub_category' => new SubCategoryResource($this->subCategory),
             'brand' => new BrandResource($this->brand),
+            'shop' => new ShopResource($this->shop),
             'image' => new ProductImageResource($this->whenLoaded('image')),
             'images' => ProductImageResource::collection($this->whenLoaded('images'))
         ];

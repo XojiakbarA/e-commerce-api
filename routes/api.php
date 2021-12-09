@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\ShopProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,7 +33,8 @@ Route::apiResources([
     'products' => ProductController::class,
     'banners' => BannerController::class,
     'reviews' => ReviewController::class,
-    'shops' => ShopController::class
+    'shops' => ShopController::class,
+    'shops.products' => ShopProductController::class
 ]);
 
 Route::get('/cart', [CartController::class, 'get']);

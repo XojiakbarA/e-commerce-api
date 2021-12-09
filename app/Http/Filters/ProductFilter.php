@@ -33,9 +33,6 @@ class ProductFilter extends AbstractFilter
 
     public function title(Builder $builder, $value)
     {
-        if ($value == 'all') :
-            return;
-        endif;
         $builder->where('title', 'like', '%' . $value . '%');
     }
 

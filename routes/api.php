@@ -34,7 +34,7 @@ Route::apiResources([
     'banners' => BannerController::class,
     'reviews' => ReviewController::class,
     'shops' => ShopController::class,
-    'shops.products' => ShopProductController::class
+    'shops.products' => ProductController::class
 ]);
 
 Route::get('/cart', [CartController::class, 'get']);

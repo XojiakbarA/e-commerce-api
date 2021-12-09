@@ -6,6 +6,7 @@ use App\Http\Filters\ProductFilter;
 use App\Http\Requests\FilterRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -15,12 +16,17 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(FilterRequest $request)
+    public function index(FilterRequest $request, Shop $shop)
     {
         $query = $request->validated();
         $count = $request->query('count') ?: 9;
         $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($query)]);
-        $products = Product::filter($filter)->with('image')->paginate($count)->withQueryString();
+        if ($shop->exists) :
+            $products = Product::filter($filter)->latest()->where('shop_id', $shop->id)->with('image')->paginate($count)->withQueryString();
+        else :
+            $products = Product::filter($filter)->latest()->with('image')->paginate($count)->withQueryString();
+        endif;
+
         return ProductResource::collection($products);
     }
 

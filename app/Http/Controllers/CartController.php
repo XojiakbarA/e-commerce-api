@@ -37,9 +37,15 @@ class CartController extends Controller
 
     public function remove($id)
     {
-        Cart::update($id, [
-           'quantity' => -1
-        ]);
+        $prod = Cart::get($id);
+
+        if ($prod->quantity == 1) :
+            Cart::remove($id);
+        else :
+            Cart::update($id, [
+               'quantity' => -1
+            ]);
+        endif;
 
         $cart = Cart::getContent();
         $cart = Arr::sort($cart);

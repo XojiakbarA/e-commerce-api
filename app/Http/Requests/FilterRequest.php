@@ -24,7 +24,7 @@ class FilterRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'string|min:3',
+            'title' => 'string',
             'cat_id' => 'integer',
             'sub_cat_id' => 'integer',
             'brand_id' => 'string',

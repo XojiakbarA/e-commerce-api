@@ -32,7 +32,7 @@ Route::apiResources([
     'brands' => BrandController::class,
     'products' => ProductController::class,
     'banners' => BannerController::class,
-    'reviews' => ReviewController::class,
+    'products.reviews' => ReviewController::class,
     'shops' => ShopController::class,
     'shops.products' => ProductController::class
 ]);

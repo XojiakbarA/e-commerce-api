@@ -25,7 +25,7 @@ class ReviewRequest extends FormRequest
     {
         return [
             'rating' => 'string',
-            'name' => 'string',
+            'name' => 'string|required',
             'text' => 'string|required',
             'product_id' => 'integer|required'
         ];

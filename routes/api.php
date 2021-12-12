@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ShopProductController;
+use App\Http\Controllers\WishlistController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -41,3 +42,7 @@ Route::get('/cart', [CartController::class, 'get']);
 Route::post('/cart/{id}', [CartController::class, 'add']);
 Route::put('/cart/{id}', [CartController::class, 'remove']);
 Route::delete('/cart/{id}', [CartController::class, 'delete']);
+
+Route::get('/wishlist', [WishlistController::class, 'get']);
+Route::post('/wishlist/{id}', [WishlistController::class, 'add']);
+Route::delete('/wishlist/{id}', [WishlistController::class, 'delete']);

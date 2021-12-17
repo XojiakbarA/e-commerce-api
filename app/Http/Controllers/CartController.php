@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\CartResource;
 use App\Models\Product;
 use Cart;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
 class CartController extends Controller
@@ -13,7 +14,8 @@ class CartController extends Controller
     {
         $cart = Cart::getContent();
         $cart = Arr::sort($cart);
-        return CartResource::collection($cart);
+        $total = Cart::getTotal();
+        return CartResource::collection($cart)->additional(['total' => $total]);
     }
 
     public function add($id)
@@ -32,7 +34,8 @@ class CartController extends Controller
 
         $cart = Cart::getContent();
         $cart = Arr::sort($cart);
-        return CartResource::collection($cart);
+        $total = Cart::getTotal();
+        return CartResource::collection($cart)->additional(['total' => $total]);
     }
 
     public function remove($id)
@@ -49,7 +52,8 @@ class CartController extends Controller
 
         $cart = Cart::getContent();
         $cart = Arr::sort($cart);
-        return CartResource::collection($cart);
+        $total = Cart::getTotal();
+        return CartResource::collection($cart)->additional(['total' => $total]);
     }
 
     public function delete($id)
@@ -58,6 +62,7 @@ class CartController extends Controller
 
         $cart = Cart::getContent();
         $cart = Arr::sort($cart);
-        return CartResource::collection($cart);
+        $total = Cart::getTotal();
+        return CartResource::collection($cart)->additional(['total' => $total]);
     }
 }

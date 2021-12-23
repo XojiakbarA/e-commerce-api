@@ -4,6 +4,7 @@ use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ShopController;
@@ -35,13 +36,15 @@ Route::apiResources([
     'banners' => BannerController::class,
     'products.reviews' => ReviewController::class,
     'shops' => ShopController::class,
-    'shops.products' => ProductController::class
+    'shops.products' => ProductController::class,
+    'orders' => OrderController::class
 ]);
 
 Route::get('/cart', [CartController::class, 'get']);
 Route::post('/cart/{id}', [CartController::class, 'add']);
 Route::put('/cart/{id}', [CartController::class, 'remove']);
 Route::delete('/cart/{id}', [CartController::class, 'delete']);
+Route::delete('/cart', [CartController::class, 'clear']);
 
 Route::get('/wishlist', [WishlistController::class, 'get']);
 Route::post('/wishlist/{id}', [WishlistController::class, 'add']);

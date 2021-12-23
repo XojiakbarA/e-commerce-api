@@ -65,4 +65,14 @@ class CartController extends Controller
         $total = Cart::getTotal();
         return CartResource::collection($cart)->additional(['total' => $total]);
     }
+
+    public function clear()
+    {
+        Cart::clear();
+
+        $cart = Cart::getContent();
+        $cart = Arr::sort($cart);
+        $total = Cart::getTotal();
+        return CartResource::collection($cart)->additional(['total' => $total]);
+    }
 }

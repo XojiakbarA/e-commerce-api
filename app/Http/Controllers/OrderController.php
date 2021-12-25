@@ -40,13 +40,14 @@ class OrderController extends Controller
     public function store(OrderRequest $request)
     {
         $data = $request->safe()->except('pay_mode');
-        $data['user_id'] = $request->user()->id;
+        $user_id = $request->user()->id;
+        $data['user_id'] = $user_id;
 
         //create order
         $order = Order::create($data);
 
         //create order products
-        $cartProducts = Cart::getContent();
+        $cartProducts = Cart::session($user_id)->getContent();
 
         foreach ($cartProducts as $product) :
             OrderProduct::create([

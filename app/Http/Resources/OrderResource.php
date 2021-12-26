@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderResource extends JsonResource
@@ -23,8 +24,8 @@ class OrderResource extends JsonResource
             'address' => $this->address,
             'zip_code' => $this->zip_code,
             'status' => $this->status,
-            'transaction_status' => $this->transaction->status,
-            'transaction_pay_mode' => $this->transaction->pay_mode
+            'total' => $this->total,
+            'created_at' => Carbon::parse($this->created_at)->toFormattedDateString()
         ];
     }
 }

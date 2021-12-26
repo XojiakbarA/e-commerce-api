@@ -25,7 +25,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->apiResource('users', UserController::class);
+Route::apiResources([
+    'users' => UserController::class,
+    'orders' => OrderController::class
+    ],
+    ['middleware' => 'auth:sanctum']
+);
 
 Route::get('/products/search', [ProductController::class, 'index']);
 Route::apiResources([
@@ -36,7 +41,6 @@ Route::apiResources([
     'products.reviews' => ReviewController::class,
     'shops' => ShopController::class,
     'shops.products' => ProductController::class,
-    'orders' => OrderController::class
 ]);
 
 Route::get('/cart', [CartController::class, 'get']);

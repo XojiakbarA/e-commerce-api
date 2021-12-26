@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderRequest;
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Transaction;
@@ -16,9 +17,11 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $orders = $request->user()->orders;
+
+        return OrderResource::collection($orders);
     }
 
     /**
@@ -39,11 +42,13 @@ class OrderController extends Controller
      */
     public function store(OrderRequest $request)
     {
+        //create order
         $data = $request->safe()->except('pay_mode');
         $user_id = $request->user()->id;
+        $total = Cart::session($user_id)->getTotal();
         $data['user_id'] = $user_id;
+        $data['total'] = $total;
 
-        //create order
         $order = Order::create($data);
 
         //create order products

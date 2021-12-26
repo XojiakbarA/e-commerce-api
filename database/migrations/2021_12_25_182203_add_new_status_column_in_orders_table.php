@@ -14,7 +14,7 @@ class AddNewStatusColumnInOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->enum('status', ['ordered', 'shipped', 'delivered', 'cancelled'])->after('zip_code')->default('ordered');
+            $table->enum('status', ['pending', 'shipped', 'delivered', 'cancelled'])->after('zip_code')->default('pending');
         });
     }
 

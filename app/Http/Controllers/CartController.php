@@ -7,34 +7,22 @@ use App\Models\Product;
 use Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
-    public function get(Request $request)
+    public function get()
     {
-        if ($request->user()) :
-            $user_id = $request->user()->id;
-        else :
-            $user_id = Session::getId();
-        endif;
-
-        $cart = Cart::session($user_id)->getContent();
+        $cart = Cart::getContent();
         $cart = Arr::sort($cart);
-        $total = Cart::session($user_id)->getTotal();
+        $total = Cart::getTotal();
         return CartResource::collection($cart)->additional(['total' => $total]);
     }
 
-    public function add(Request $request, $id)
+    public function add($id)
     {
         $product = Product::find($id);
-        if ($request->user()) :
-            $user_id = $request->user()->id;
-        else :
-            $user_id = Session::getId();
-        endif;
 
-        Cart::session($user_id)->add([
+        Cart::add([
             'id' => $product->id,
             'name' => $product->title,
             'price' => $product->price,
@@ -44,21 +32,15 @@ class CartController extends Controller
             ]
         ]);
 
-        $cart = Cart::session($user_id)->getContent();
+        $cart = Cart::getContent();
         $cart = Arr::sort($cart);
-        $total = Cart::session($user_id)->getTotal();
+        $total = Cart::getTotal();
         return CartResource::collection($cart)->additional(['total' => $total]);
     }
 
-    public function remove(Request $request, $id)
+    public function remove($id)
     {
-        if ($request->user()) :
-            $user_id = $request->user()->id;
-        else :
-            $user_id = Session::getId();
-        endif;
-
-        $prod = Cart::session($user_id)->get($id);
+        $prod = Cart::get($id);
 
         if ($prod->quantity == 1) :
             Cart::remove($id);
@@ -68,41 +50,29 @@ class CartController extends Controller
             ]);
         endif;
 
-        $cart = Cart::session($user_id)->getContent();
+        $cart = Cart::getContent();
         $cart = Arr::sort($cart);
-        $total = Cart::session($user_id)->getTotal();
+        $total = Cart::getTotal();
         return CartResource::collection($cart)->additional(['total' => $total]);
     }
 
-    public function delete(Request $request, $id)
+    public function delete($id)
     {
-        if ($request->user()) :
-            $user_id = $request->user()->id;
-        else :
-            $user_id = Session::getId();
-        endif;
+        Cart::remove($id);
 
-        Cart::session($user_id)->remove($id);
-
-        $cart = Cart::session($user_id)->getContent();
+        $cart = Cart::getContent();
         $cart = Arr::sort($cart);
-        $total = Cart::session($user_id)->getTotal();
+        $total = Cart::getTotal();
         return CartResource::collection($cart)->additional(['total' => $total]);
     }
 
-    public function clear(Request $request)
+    public function clear()
     {
-        if ($request->user()) :
-            $user_id = $request->user()->id;
-        else :
-            $user_id = Session::getId();
-        endif;
+        Cart::clear();
 
-        Cart::session($user_id)->clear();
-
-        $cart = Cart::session($user_id)->getContent();
+        $cart = Cart::getContent();
         $cart = Arr::sort($cart);
-        $total = Cart::session($user_id)->getTotal();
+        $total = Cart::getTotal();
         return CartResource::collection($cart)->additional(['total' => $total]);
     }
 }

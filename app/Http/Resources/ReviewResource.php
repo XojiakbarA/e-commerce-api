@@ -20,7 +20,7 @@ class ReviewResource extends JsonResource
             'rating' => $this->rating,
             'text' => $this->text,
             'image' => $this->image,
-            'created_at' => $this->created_at
+            'created_at' => $this->created_at->diffForHumans()
         ];
     }
 }

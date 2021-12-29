@@ -25,7 +25,7 @@ class OrderResource extends JsonResource
             'zip_code' => $this->zip_code,
             'status' => $this->status,
             'total' => $this->total,
-            'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
+            'created_at' => $this->created_at->toFormattedDateString(),
             'order_products' => OrderProductResource::collection($this->orderProducts)
         ];
     }

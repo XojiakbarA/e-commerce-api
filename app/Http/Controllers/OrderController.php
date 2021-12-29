@@ -45,15 +45,13 @@ class OrderController extends Controller
     {
         //create order
         $data = $request->safe()->except('pay_mode');
-        $user_id = $request->user()->id;
-        $total = Cart::session($user_id)->getTotal();
-        $data['user_id'] = $user_id;
-        $data['total'] = $total;
+        $data['user_id'] = $request->user()->id;
+        $data['total'] = Cart::getTotal();
 
         $order = Order::create($data);
 
         //create order products
-        $cartProducts = Cart::session($user_id)->getContent();
+        $cartProducts = Cart::getContent();
 
         foreach ($cartProducts as $product) :
             OrderProduct::create([

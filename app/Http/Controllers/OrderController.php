@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OrderCancellationRequest;
 use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
@@ -104,9 +105,13 @@ class OrderController extends Controller
      * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Order $order)
+    public function update(OrderCancellationRequest $request, Order $order)
     {
-        //
+        $status = $request->status;
+        $order->status = $status;
+        $order->save();
+
+        return new OrderResource($order);
     }
 
     /**

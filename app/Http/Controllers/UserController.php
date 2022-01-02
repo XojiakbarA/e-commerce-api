@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EditUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -49,9 +51,15 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(EditUserRequest $request, User $user)
     {
-        //
+        $data = $request->validated();
+        if ($data['birth_date']) :
+            $data['birth_date'] = Carbon::parse($data['birth_date'])->setTimezone('Asia/Tashkent')->toDateString();
+        endif;
+        $user->update($data);
+
+        return new UserResource($user);
     }
 
     /**

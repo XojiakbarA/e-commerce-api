@@ -22,6 +22,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'phone' => $this->phone,
             'birth_date' => $this->birth_date,
+            'image' => $this->image,
             'all_orders_count' => $this->orders->count(),
             'awaiting_payment_count' => $this->transactions->where('status', 'pending')->count(),
             'awaiting_shipment_count' => $this->transactions->where('status', 'approved')->count(),

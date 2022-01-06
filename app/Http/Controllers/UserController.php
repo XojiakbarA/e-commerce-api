@@ -62,7 +62,7 @@ class UserController extends Controller
             if (File::exists('storage/images/users/' . $user->image)) :
                 File::delete('storage/images/users/' . $user->image);
             endif;
-            $imageName = $request->user()->id . '.' . $image->extension();
+            $imageName = $image->hashName();
             $inter = Image::make($image);
             $inter->fit(200);
             $inter->save('storage/images/users/' . $imageName);

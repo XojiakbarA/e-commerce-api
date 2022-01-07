@@ -11,6 +11,7 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ShopProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\RegionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +42,7 @@ Route::apiResources([
     'products.reviews' => ReviewController::class,
     'shops' => ShopController::class,
     'shops.products' => ProductController::class,
+    'regions' => RegionController::class,
 ]);
 
 Route::get('/cart', [CartController::class, 'get']);

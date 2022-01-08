@@ -4,11 +4,11 @@ use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ShopController;
-use App\Http\Controllers\ShopProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\RegionController;
@@ -43,6 +43,7 @@ Route::apiResources([
     'shops' => ShopController::class,
     'shops.products' => ProductController::class,
     'regions' => RegionController::class,
+    'regions.districts' => DistrictController::class
 ]);
 
 Route::get('/cart', [CartController::class, 'get']);

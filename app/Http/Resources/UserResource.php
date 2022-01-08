@@ -26,7 +26,8 @@ class UserResource extends JsonResource
             'all_orders_count' => $this->orders->count(),
             'awaiting_payment_count' => $this->transactions->where('status', 'pending')->count(),
             'awaiting_shipment_count' => $this->transactions->where('status', 'approved')->count(),
-            'awaiting_delivery_count' => $this->orders->where('status', 'shipped')->count()
+            'awaiting_delivery_count' => $this->orders->where('status', 'shipped')->count(),
+            'shops' => ShopResource::collection($this->shops)
         ];
     }
 }

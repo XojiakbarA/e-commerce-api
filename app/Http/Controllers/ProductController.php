@@ -52,15 +52,16 @@ class ProductController extends Controller
     {
         $data = $request->validated();
         $images = $request->file('images');
+        $imageNames = [];
 
         if ($images != null) {
-
-            $imageNames = [];
 
             $mainImage = $images[0];
             $mainImageName = 'main_' . $mainImage->hashName();
             $inter = Image::make($mainImage);
-            $inter->fit(300);
+            $inter->fit(300, function($constraint) {
+                $constraint->upsize();
+            });
             $inter->save('storage/images/products/' . $mainImageName);
             array_push($imageNames, [
                 'src' => $mainImageName,
@@ -70,7 +71,9 @@ class ProductController extends Controller
             foreach ($images as $image) {
                 $imageName = $image->hashName();
                 $inter = Image::make($image);
-                $inter->fit(432, 540);
+                $inter->fit(500, 625, function($constraint) {
+                    $constraint->upsize();
+                });
                 $inter->save('storage/images/products/' . $imageName);
                 array_push($imageNames, [
                     'src' => $imageName,
@@ -85,7 +88,7 @@ class ProductController extends Controller
         $product = Product::create($data);
         $product->images()->createMany($imageNames);
 
-        return $product;
+        return new ProductResource($product);
     }
 
     /**

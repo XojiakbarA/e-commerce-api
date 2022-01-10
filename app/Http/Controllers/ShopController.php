@@ -66,7 +66,7 @@ class ShopController extends Controller
 
         $shop = Shop::create($data);
 
-        return $shop;
+        return new ShopResource($shop);
     }
 
     /**

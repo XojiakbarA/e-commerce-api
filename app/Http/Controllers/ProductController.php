@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Filters\ProductFilter;
 use App\Http\Requests\FilterRequest;
+use App\Http\Requests\StoreProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Models\Shop;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 
 class ProductController extends Controller
 {
@@ -46,9 +48,44 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        //
+        $data = $request->validated();
+        $images = $request->file('images');
+
+        if ($images != null) {
+
+            $imageNames = [];
+
+            $mainImage = $images[0];
+            $mainImageName = 'main_' . $mainImage->hashName();
+            $inter = Image::make($mainImage);
+            $inter->fit(300);
+            $inter->save('storage/images/products/' . $mainImageName);
+            array_push($imageNames, [
+                'src' => $mainImageName,
+                'main' => 1
+            ]);
+            
+            foreach ($images as $image) {
+                $imageName = $image->hashName();
+                $inter = Image::make($image);
+                $inter->fit(432, 540);
+                $inter->save('storage/images/products/' . $imageName);
+                array_push($imageNames, [
+                    'src' => $imageName,
+                    'main' => 0
+                ]);
+            }
+        }
+
+        unset($data['images']);
+        unset($data['category_id']);
+        
+        $product = Product::create($data);
+        $product->images()->createMany($imageNames);
+
+        return $product;
     }
 
     /**

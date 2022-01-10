@@ -12,6 +12,8 @@ class Product extends Model
     use HasFactory;
     use Filterable;
 
+    protected $guarded = [];
+
     public function subCategory()
     {
         return $this->belongsTo(SubCategory::class);

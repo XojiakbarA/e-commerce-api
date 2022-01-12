@@ -59,7 +59,7 @@ class ProductController extends Controller
             $mainImage = $images[0];
             $mainImageName = 'main_' . $mainImage->hashName();
             $inter = Image::make($mainImage);
-            $inter->fit(300, function($constraint) {
+            $inter->fit(300, 300, function($constraint) {
                 $constraint->upsize();
             });
             $inter->save('storage/images/products/' . $mainImageName);

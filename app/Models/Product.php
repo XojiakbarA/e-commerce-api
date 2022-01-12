@@ -42,8 +42,6 @@ class Product extends Model
 
     public function image()
     {
-        return $this->hasOne(ProductImage::class)
-                    ->where('main', true)
-                    ->withDefault(['src' => 'no_image.jpeg']);
+        return $this->hasOne(ProductImage::class)->where('main', true);
     }
 }

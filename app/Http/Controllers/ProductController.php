@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Filters\ProductFilter;
 use App\Http\Requests\FilterRequest;
-use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Models\Shop;
@@ -48,7 +48,7 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreProductRequest $request)
+    public function store(ProductRequest $request)
     {
         $data = $request->validated();
         $images = $request->file('images');
@@ -119,9 +119,51 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
-        //
+        $data = $request->validated();
+        $images = $request->file('images');
+        $imageNames = [];
+
+        if ($images != null) :
+
+            $mainImage = $product->image;
+
+            if (!$mainImage) :
+                $mainImage = $images[0];
+                $mainImageName = 'main_' . $mainImage->hashName();
+                $inter = Image::make($mainImage);
+                $inter->fit(300, 300, function($constraint) {
+                    $constraint->upsize();
+                });
+                $inter->save('storage/images/products/' . $mainImageName);
+                array_push($imageNames, [
+                    'src' => $mainImageName,
+                    'main' => 1
+                ]);
+            endif;
+
+            foreach ($images as $image) {
+                $imageName = $image->hashName();
+                $inter = Image::make($image);
+                $inter->fit(500, 625, function($constraint) {
+                    $constraint->upsize();
+                });
+                $inter->save('storage/images/products/' . $imageName);
+                array_push($imageNames, [
+                    'src' => $imageName,
+                    'main' => 0
+                ]);
+            }
+        endif;
+
+        unset($data['images']);
+        unset($data['category_id']);
+
+        $product->update($data);
+        $product->images()->createMany($imageNames);
+
+        return new ProductResource($product->load(['images']));
     }
 
     /**

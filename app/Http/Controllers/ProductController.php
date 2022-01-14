@@ -6,9 +6,11 @@ use App\Http\Filters\ProductFilter;
 use App\Http\Requests\FilterRequest;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Http\Resources\ShopResource;
 use App\Models\Product;
 use App\Models\Shop;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
 class ProductController extends Controller
@@ -172,8 +174,20 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy(Shop $shop, Product $product)
     {
-        //
+        if ($product->image) :
+            Storage::delete('public/images/products/' . $product->image->src);
+        endif;
+        
+        if ($product->images) :
+            foreach ($product->images as $image) :
+                Storage::delete('public/images/products/' . $image->src);
+            endforeach;
+        endif;
+
+        $product->delete();
+
+        return new ShopResource($shop);
     }
 }

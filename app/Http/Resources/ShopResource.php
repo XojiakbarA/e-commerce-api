@@ -18,7 +18,10 @@ class ShopResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'rating' => $this->rating,
-            'address' => $this->address,
+            'region' => new RegionResource($this->district->region),
+            'district' => new DistrictResource($this->district),
+            'street' => $this->street,
+            'home' => $this->home,
             'phone_number' => $this->phone_number,
             'bg_image' => $this->bg_image,
             'av_image' => $this->av_image

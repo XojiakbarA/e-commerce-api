@@ -15,4 +15,9 @@ class Shop extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    public function district()
+    {
+        return $this->belongsTo(District::class);
+    }
 }

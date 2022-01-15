@@ -9,9 +9,7 @@ use App\Http\Resources\ProductResource;
 use App\Http\Resources\ShopResource;
 use App\Models\Product;
 use App\Models\Shop;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
 
 class ProductController extends Controller
 {
@@ -26,22 +24,12 @@ class ProductController extends Controller
         $count = $request->query('count') ?: 9;
         $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($query)]);
         if ($shop->exists) :
-            $products = Product::filter($filter)->latest()->where('shop_id', $shop->id)->with('image')->paginate($count)->withQueryString();
+            $products = Product::filter($filter)->latest()->where('shop_id', $shop->id)->paginate($count);
         else :
-            $products = Product::filter($filter)->latest()->with('image')->paginate($count)->withQueryString();
+            $products = Product::filter($filter)->latest()->paginate($count);
         endif;
 
         return ProductResource::collection($products);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -57,31 +45,19 @@ class ProductController extends Controller
         $imageNames = [];
 
         if ($images != null) {
-
-            $mainImage = $images[0];
-            $mainImageName = 'main_' . $mainImage->hashName();
-            $inter = Image::make($mainImage);
-            $inter->fit(300, 300, function($constraint) {
-                $constraint->upsize();
-            });
-            $inter->save('storage/images/products/' . $mainImageName);
+            $mainImageName = Product::makeImage($images[0], 'main_', 300, 300);
             array_push($imageNames, [
                 'src' => $mainImageName,
                 'main' => 1
             ]);
-            
-            foreach ($images as $image) {
-                $imageName = $image->hashName();
-                $inter = Image::make($image);
-                $inter->fit(500, 625, function($constraint) {
-                    $constraint->upsize();
-                });
-                $inter->save('storage/images/products/' . $imageName);
+
+            foreach ($images as $image) :
+                $imageName = Product::makeImage($image, null, 500, 625);
                 array_push($imageNames, [
                     'src' => $imageName,
                     'main' => 0
                 ]);
-            }
+            endforeach;
         }
 
         unset($data['images']);
@@ -101,17 +77,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return new ProductResource($product->load(['images']));
-    }
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
-    {
-        //
+        return new ProductResource($product);
     }
 
     /**
@@ -128,35 +94,23 @@ class ProductController extends Controller
         $imageNames = [];
 
         if ($images != null) :
-
             $mainImage = $product->image;
 
             if (!$mainImage) :
-                $mainImage = $images[0];
-                $mainImageName = 'main_' . $mainImage->hashName();
-                $inter = Image::make($mainImage);
-                $inter->fit(300, 300, function($constraint) {
-                    $constraint->upsize();
-                });
-                $inter->save('storage/images/products/' . $mainImageName);
+                $mainImageName = Product::makeImage($images[0], 'main_', 300, 300);
                 array_push($imageNames, [
                     'src' => $mainImageName,
                     'main' => 1
                 ]);
             endif;
 
-            foreach ($images as $image) {
-                $imageName = $image->hashName();
-                $inter = Image::make($image);
-                $inter->fit(500, 625, function($constraint) {
-                    $constraint->upsize();
-                });
-                $inter->save('storage/images/products/' . $imageName);
+            foreach ($images as $image) :
+                $imageName = Product::makeImage($image, null, 500, 625);
                 array_push($imageNames, [
                     'src' => $imageName,
                     'main' => 0
                 ]);
-            }
+            endforeach;
         endif;
 
         unset($data['images']);
@@ -165,7 +119,7 @@ class ProductController extends Controller
         $product->update($data);
         $product->images()->createMany($imageNames);
 
-        return new ProductResource($product->load(['images']));
+        return new ProductResource($product);
     }
 
     /**

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ReviewRequest;
+use App\Http\Resources\ProductResource;
 use App\Http\Resources\ReviewResource;
 use App\Models\Product;
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
@@ -36,11 +38,17 @@ class ReviewController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ReviewRequest $request)
+    public function store(ReviewRequest $request, Product $product)
     {
         $data = $request->validated();
-        $review = Review::create($data);
-        return $review;
+
+        if (Auth::check()) :
+            $data['image'] = Auth::user()->image;
+        endif;
+
+        $product->reviews()->create($data);
+
+        return ReviewResource::collection($product->reviews);
     }
 
     /**

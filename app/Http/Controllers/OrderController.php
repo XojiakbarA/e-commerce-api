@@ -20,7 +20,7 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $orders = $request->user()->orders;
+        $orders = $request->user()->orders()->paginate(5);
 
         return OrderResource::collection($orders);
     }

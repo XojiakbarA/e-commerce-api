@@ -7,8 +7,7 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -21,7 +20,7 @@ class UserController extends Controller
     {
         $user = User::find($request->user()->id);
 
-        return new UserResource($user->load('orders'));
+        return new UserResource($user);
     }
 
     /**
@@ -59,15 +58,13 @@ class UserController extends Controller
         $image = $request->file('image');
 
         if ($image != null) :
-            if (File::exists('storage/images/users/' . $user->image)) :
-                File::delete('storage/images/users/' . $user->image);
-            endif;
-            $imageName = $image->hashName();
-            $inter = Image::make($image);
-            $inter->fit(200);
-            $inter->save('storage/images/users/' . $imageName);
+            Storage::delete('public/images/users/' . $user->image);
+            $imageName = User::makeImage($image, 300, 300);
             $data['image'] = $imageName;
+        else :
+            unset($data['image']);
         endif;
+
         if ($request->get('birth_date') != null) :
             $data['birth_date'] = Carbon::parse($data['birth_date'])->setTimezone('Asia/Tashkent')->toDateString();
         endif;

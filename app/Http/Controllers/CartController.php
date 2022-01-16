@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\CartResource;
 use App\Models\Product;
 use Cart;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
 class CartController extends Controller
@@ -28,7 +27,8 @@ class CartController extends Controller
             'price' => $product->price,
             'quantity' => 1,
             'attributes' => [
-                'image' => $product->image
+                'image' => $product->image,
+                'sale_price' => $product->sale_price
             ]
         ]);
 
@@ -46,7 +46,7 @@ class CartController extends Controller
             Cart::remove($id);
         else :
             Cart::update($id, [
-               'quantity' => -1
+                'quantity' => -1
             ]);
         endif;
 

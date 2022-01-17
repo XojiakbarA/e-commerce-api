@@ -44,6 +44,7 @@ class OrderController extends Controller
     public function store(OrderRequest $request)
     {
         //create order
+        $data = $request->validated();
         $data = $request->safe()->except('pay_mode');
         $data['user_id'] = $request->user()->id;
         $data['total'] = Cart::getTotal();
@@ -54,7 +55,7 @@ class OrderController extends Controller
         $cartProducts = Cart::getContent();
 
         foreach ($cartProducts as $product) :
-            OrderProduct::create([
+            $order->orderProducts()->create([
                 'product_id' => $product->id,
                 'order_id' => $order->id,
                 'price' => $product->price,
@@ -65,11 +66,13 @@ class OrderController extends Controller
         //create transaction
         $pay_mode = $request->pay_mode;
 
-        Transaction::create([
-            'order_id' => $order->id,
+        $order->transaction()->create([
             'user_id' => $request->user()->id,
             'pay_mode' => $pay_mode
         ]);
+
+        //clear cart
+        Cart::clear();
 
         return $order;
     }

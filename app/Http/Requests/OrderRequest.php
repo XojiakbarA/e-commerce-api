@@ -26,10 +26,10 @@ class OrderRequest extends FormRequest
         return [
             'name' => 'string|required',
             'email' => 'string|required',
-            'phone' => 'required',
-            'country' => 'required',
-            'address' => 'required',
-            'zip_code' => 'required',
+            'phone' => 'required|string|min:14|max:14',
+            'district_id' => 'required|integer',
+            'street' => 'required|string',
+            'home' => 'required|string',
             'pay_mode' => 'in:cod,payme,click,uzcard'
         ];
     }

@@ -27,7 +27,6 @@ class StoreShopRequest extends FormRequest
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'title' => 'required|string',
-            'region_id' => 'required|integer',
             'district_id' => 'required|integer',
             'street' => 'required|string',
             'home' => 'required|string',

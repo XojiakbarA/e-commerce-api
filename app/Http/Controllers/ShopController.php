@@ -8,8 +8,6 @@ use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
-use Intervention\Image\Facades\Image;
 
 class ShopController extends Controller
 {
@@ -46,25 +44,36 @@ class ShopController extends Controller
         $bg_image = $request->file('bg_image');
         $av_image = $request->file('av_image');
 
+        $imageNames = [];
+
         if ($bg_image != null) :
-            $imageName = $bg_image->hashName();
-            $inter = Image::make($bg_image);
-            $inter->fit(200, 375);
-            $inter->save('storage/images/shops/' . $imageName);
-            $data['bg_image'] = $imageName;
+            $imageName = Shop::makeImage($bg_image, 'big_', 1152, 330);
+            array_push($imageNames, [
+                'src' => $imageName,
+                'status' => 'bg_big'
+            ]);
+
+            $imageName = Shop::makeImage($bg_image, 'small_', 750, 400);
+            array_push($imageNames, [
+                'src' => $imageName,
+                'status' => 'bg_small'
+            ]);
         endif;
 
         if ($av_image != null) :
-            $imageName = $av_image->hashName();
-            $inter = Image::make($av_image);
-            $inter->fit(200);
-            $inter->save('storage/images/shops/' . $imageName);
-            $data['av_image'] = $imageName;
+            $imageName = Shop::makeImage($av_image, null, 200, 200);
+            array_push($imageNames, [
+                'src' => $imageName,
+                'status' => 'avatar'
+            ]);
         endif;
 
         $data['user_id'] = Auth::user()->id;
+        unset($data['bg_image']);
+        unset($data['av_image']);
 
         $shop = Shop::create($data);
+        $shop->images()->createMany($imageNames);
 
         return new ShopResource($shop);
     }

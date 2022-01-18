@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderResource extends JsonResource
@@ -20,9 +19,10 @@ class OrderResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
-            'country' => $this->country,
-            'address' => $this->address,
-            'zip_code' => $this->zip_code,
+            'region' => new RegionResource($this->district->region),
+            'district' => new DistrictResource($this->district),
+            'street' => $this->street,
+            'home' => $this->home,
             'status' => $this->status,
             'total' => $this->total,
             'created_at' => $this->created_at->toFormattedDateString(),

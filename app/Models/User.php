@@ -62,6 +62,11 @@ class User extends Authenticatable
         return $this->hasMany(Shop::class);
     }
 
+    public function image()
+    {
+        return $this->hasOne(UserImage::class);
+    }
+
     public static function makeImage($image, $width, $height)
     {
         $imageName = $image->hashName();

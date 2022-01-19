@@ -58,18 +58,25 @@ class UserController extends Controller
         $image = $request->file('image');
 
         if ($image != null) :
-            Storage::delete('public/images/users/' . $user->image);
             $imageName = User::makeImage($image, 300, 300);
-            $data['image'] = $imageName;
-        else :
-            unset($data['image']);
+
+            if ($user->image) :
+                Storage::delete('public/images/users/' . $user->image->src);
+                $user->image()->update(['src' => $imageName]);
+            else :
+                $user->image()->create(['src' => $imageName]);
+            endif;
         endif;
 
         if ($request->get('birth_date') != null) :
             $data['birth_date'] = Carbon::parse($data['birth_date'])->setTimezone('Asia/Tashkent')->toDateString();
         endif;
 
+        unset($data['image']);
+
         $user->update($data);
+
+        $user->refresh();
 
         return new UserResource($user);
     }

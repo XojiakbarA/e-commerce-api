@@ -83,8 +83,10 @@ class OrderController extends Controller
      * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function show(Order $order)
+    public function show(Request $request, Order $order)
     {
+        $order = $request->user()->orders()->findOrFail($order->id);
+
         return new OrderResource($order);
     }
 

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User\Shop;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Models\ProductImage;
@@ -22,16 +23,6 @@ class ProductImageController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -45,21 +36,10 @@ class ProductImageController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ProductImage  $productImage
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(ProductImage $productImage)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\ProductImage  $productImage
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ProductImage $productImage)
+    public function show($id)
     {
         //
     }
@@ -68,10 +48,10 @@ class ProductImageController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ProductImage  $productImage
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProductImage $productImage)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -79,7 +59,7 @@ class ProductImageController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ProductImage  $productImage
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Product $product, ProductImage $productImage)

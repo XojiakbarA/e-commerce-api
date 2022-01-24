@@ -7,14 +7,15 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\RegionController;
+use App\Http\Controllers\ShopProductController;
+use App\Http\Controllers\User\Shop\ProductImageController;
+use App\Http\Controllers\User\Shop\UserShopProductController;
 use App\Http\Controllers\UserImageController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,6 +29,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// User routes
 Route::apiResources([
     'users' => UserController::class,
     'orders' => OrderController::class,
@@ -36,18 +38,26 @@ Route::apiResources([
     ['middleware' => 'auth:sanctum']
 );
 
-Route::get('/products/search', [ProductController::class, 'index']);
+// Vendor routes
+Route::apiResources([
+    'users.shops.products' => UserShopProductController::class,
+    'products.product-images' => ProductImageController::class,
+    ],
+    ['middleware' => 'auth:sanctum']
+);
+
+Route::apiResource('products', ProductController::class)->only(['index', 'show']);
+
+Route::get('shops/{shop}/products', ShopProductController::class);
+
 Route::apiResources([
     'categories' => CategoryController::class,
     'brands' => BrandController::class,
-    'products' => ProductController::class,
     'banners' => BannerController::class,
     'products.reviews' => ReviewController::class,
     'shops' => ShopController::class,
-    'shops.products' => ProductController::class,
     'regions' => RegionController::class,
     'regions.districts' => DistrictController::class,
-    'products.product-images' => ProductImageController::class,
 ]);
 
 Route::get('/cart', [CartController::class, 'get']);

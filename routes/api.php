@@ -15,6 +15,7 @@ use App\Http\Controllers\RegionController;
 use App\Http\Controllers\ShopProductController;
 use App\Http\Controllers\User\Shop\ProductImageController;
 use App\Http\Controllers\User\Shop\UserShopProductController;
+use App\Http\Controllers\User\UserShopController;
 use App\Http\Controllers\UserImageController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,7 +34,8 @@ use Illuminate\Support\Facades\Route;
 Route::apiResources([
     'users' => UserController::class,
     'orders' => OrderController::class,
-    'users.user-images' => UserImageController::class,
+    'shops' => UserShopController::class,
+    'user-images' => UserImageController::class,
     ],
     ['middleware' => 'auth:sanctum']
 );
@@ -48,6 +50,8 @@ Route::apiResources([
 
 Route::apiResource('products', ProductController::class)->only(['index', 'show']);
 
+Route::apiResource('shops', ShopController::class)->only(['index', 'show']);
+
 Route::get('shops/{shop}/products', ShopProductController::class);
 
 Route::apiResources([
@@ -55,7 +59,6 @@ Route::apiResources([
     'brands' => BrandController::class,
     'banners' => BannerController::class,
     'products.reviews' => ReviewController::class,
-    'shops' => ShopController::class,
     'regions' => RegionController::class,
     'regions.districts' => DistrictController::class,
 ]);

@@ -81,11 +81,13 @@ class UserImageController extends Controller
      * @param  \App\Models\UserImage  $userImage
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(Request $request)
     {
+        $user = $request->user();
+        
         Storage::delete('public/images/users/' . $user->image->src);
 
-        $user->image()->delete();
+        $user->image->deleteOrFail();
 
         $user->refresh();
 

@@ -17,10 +17,10 @@ class ProductController extends Controller
     public function index(FilterRequest $request)
     {
         $query = $request->validated();
-
+        $count = $request->query('count') ?? 9;
         $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($query)]);
 
-        $products = Product::filter($filter)->latest()->paginate(9);
+        $products = Product::filter($filter)->latest()->paginate($count);
 
         return ProductResource::collection($products);
     }

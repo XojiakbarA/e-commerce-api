@@ -43,7 +43,7 @@ Route::apiResources([
     'users.shops.products' => UserShopProductController::class,
     'products.product-images' => ProductImageController::class,
     ],
-    ['middleware' => 'auth:sanctum']
+    ['middleware' => ['auth:sanctum', 'is_vendor']]
 );
 
 Route::apiResource('products', ProductController::class)->only(['index', 'show']);

@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Http\Requests\EditUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -18,7 +19,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $user = User::find($request->user()->id);
+        $user = $request->user();
 
         return new UserResource($user);
     }

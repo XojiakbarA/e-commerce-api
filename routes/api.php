@@ -5,18 +5,12 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DistrictController;
-use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
-use App\Http\Controllers\ShopController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\RegionController;
-use App\Http\Controllers\ShopProductController;
-use App\Http\Controllers\User\Shop\ProductImageController;
-use App\Http\Controllers\User\Shop\UserShopProductController;
-use App\Http\Controllers\User\UserShopController;
-use App\Http\Controllers\UserImageController;
+use App\Http\Controllers\Shop\ShopController;
+use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,28 +25,29 @@ use Illuminate\Support\Facades\Route;
 */
 
 // User routes
-Route::apiResources([
-    'users' => UserController::class,
-    'orders' => OrderController::class,
-    'shops' => UserShopController::class,
-    'user-images' => UserImageController::class,
-    ],
-    ['middleware' => 'auth:sanctum']
-);
+Route::apiResources(['users' => UserController::class], ['middleware' => 'auth:sanctum']);
+
+Route::middleware('auth:sanctum')->prefix('user')->group(function() {
+    Route::apiResources([
+        'orders' => App\Http\Controllers\User\OrderController::class,
+        'shops' => App\Http\Controllers\User\ShopController::class,
+        'user-images' => App\Http\Controllers\User\UserImageController::class,
+    ]);
+});
 
 // Vendor routes
-Route::apiResources([
-    'users.shops.products' => UserShopProductController::class,
-    'products.product-images' => ProductImageController::class,
-    ],
-    ['middleware' => ['auth:sanctum', 'is_vendor']]
-);
+Route::middleware(['auth:sanctum', 'is_vendor'])->prefix('vendor')->group(function() {
+    Route::apiResources([
+        'shops.products' => App\Http\Controllers\Vendor\ProductController::class,
+        'shops.products.product-images' => App\Http\Controllers\Vendor\ProductImageController::class,
+    ]);
+});
 
 Route::apiResource('products', ProductController::class)->only(['index', 'show']);
 
 Route::apiResource('shops', ShopController::class)->only(['index', 'show']);
 
-Route::get('shops/{shop}/products', ShopProductController::class);
+Route::get('shops/{shop}/products', App\Http\Controllers\Shop\ProductController::class);
 
 Route::apiResources([
     'categories' => CategoryController::class,

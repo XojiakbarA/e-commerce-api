@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
-use App\Models\OrderProduct;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Resources\UserResource;
+use App\Models\UserImage;
+use Illuminate\Support\Facades\Storage;
 
-class OrderProductController extends Controller
+class UserImageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +44,10 @@ class OrderProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\OrderProduct  $orderProduct
+     * @param  \App\Models\UserImage  $userImage
      * @return \Illuminate\Http\Response
      */
-    public function show(OrderProduct $orderProduct)
+    public function show(UserImage $userImage)
     {
         //
     }
@@ -52,10 +55,10 @@ class OrderProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\OrderProduct  $orderProduct
+     * @param  \App\Models\UserImage  $userImage
      * @return \Illuminate\Http\Response
      */
-    public function edit(OrderProduct $orderProduct)
+    public function edit(UserImage $userImage)
     {
         //
     }
@@ -64,10 +67,10 @@ class OrderProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\OrderProduct  $orderProduct
+     * @param  \App\Models\UserImage  $userImage
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, OrderProduct $orderProduct)
+    public function update(Request $request, UserImage $userImage)
     {
         //
     }
@@ -75,11 +78,19 @@ class OrderProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\OrderProduct  $orderProduct
+     * @param  \App\Models\UserImage  $userImage
      * @return \Illuminate\Http\Response
      */
-    public function destroy(OrderProduct $orderProduct)
+    public function destroy(Request $request)
     {
-        //
+        $user = $request->user();
+        
+        Storage::delete('public/images/users/' . $user->image->src);
+
+        $user->image->deleteOrFail();
+
+        $user->refresh();
+
+        return new UserResource($user);
     }
 }

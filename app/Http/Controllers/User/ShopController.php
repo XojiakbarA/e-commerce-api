@@ -8,7 +8,7 @@ use App\Http\Resources\ShopResource;
 use App\Models\Shop;
 use Illuminate\Http\Request;
 
-class UserShopController extends Controller
+class ShopController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -77,9 +77,9 @@ class UserShopController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, $shop_id)
     {
-        $shop = $request->user()->shops()->findOrFail($id);
+        $shop = $request->user()->shops()->findOrFail($shop_id);
 
         return new ShopResource($shop);
     }

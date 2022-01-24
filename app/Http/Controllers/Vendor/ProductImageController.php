@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\User\Shop;
+namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
-use App\Models\Product;
-use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
@@ -62,9 +60,14 @@ class ProductImageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product, ProductImage $productImage)
+    public function destroy(Request $request, $shop_id, $product_id, $image_id)
     {
-        $productImage->delete();
+        $shop = $request->user()->shops()->findOrFail($shop_id);
+
+        $product = $shop->products()->findOrFail($product_id);
+
+        $productImage = $product->images()->deleteOrFail($image_id);
+
         Storage::delete('public/images/products/' . $productImage->src);
 
         $mainImageSrc = $product->image->src;

@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Http\Requests\OrderCancellationRequest;
 use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
-use App\Models\OrderProduct;
-use App\Models\Transaction;
 use Cart;
-use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -83,9 +82,9 @@ class OrderController extends Controller
      * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Order $order)
+    public function show(Request $request, $order_id)
     {
-        $order = $request->user()->orders()->findOrFail($order->id);
+        $order = $request->user()->orders()->findOrFail($order_id);
 
         return new OrderResource($order);
     }
@@ -108,11 +107,13 @@ class OrderController extends Controller
      * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(OrderCancellationRequest $request, Order $order)
+    public function update(OrderCancellationRequest $request, $order_id)
     {
+        $order = $request->user()->orders()->findOrFail($order_id);
+
         $status = $request->status;
-        $order->status = $status;
-        $order->save();
+
+        $order->update(['status' => $status]);
 
         return new OrderResource($order);
     }

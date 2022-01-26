@@ -66,18 +66,22 @@ class ProductImageController extends Controller
 
         $product = $shop->products()->findOrFail($product_id);
 
-        $productImage = $product->images()->deleteOrFail($image_id);
+        $productImage = $product->images()->findOrFail($image_id);
+
+        $productImage->delete();
 
         Storage::delete('public/images/products/' . $productImage->src);
 
         $mainImageSrc = $product->image->src;
 
-        if ($mainImageSrc == 'main_' . $productImage->src) :
+        if ($mainImageSrc === 'main_' . $productImage->src) :
 
-            $product->image->delete();
+            $product->image()->delete();
             Storage::delete('public/images/products/' . $mainImageSrc);
 
-            $firstImage = $product->images->first();
+            $product->refresh();
+
+            $firstImage = $product->images()->first();
 
             if ($firstImage) :
                 $firstImageSrc = $firstImage->src;

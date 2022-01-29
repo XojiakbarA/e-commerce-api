@@ -23,10 +23,9 @@ class OrderResource extends JsonResource
             'district' => new DistrictResource($this->district),
             'street' => $this->street,
             'home' => $this->home,
-            'status' => $this->status,
             'total' => $this->total,
             'created_at' => $this->created_at->toFormattedDateString(),
-            'order_products' => OrderProductResource::collection($this->orderProducts)
+            'order_shops' => ShopOrderResource::collection($this->shopOrders)
         ];
     }
 }

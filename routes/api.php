@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->prefix('user')->group(function() {
 // Vendor routes
 Route::middleware(['auth:sanctum', 'is_vendor'])->prefix('vendor')->group(function() {
     Route::apiResources([
+        'shops.orders' => App\Http\Controllers\Vendor\OrderController::class,
         'shops.products' => App\Http\Controllers\Vendor\ProductController::class,
         'shops.products.product-images' => App\Http\Controllers\Vendor\ProductImageController::class,
     ]);

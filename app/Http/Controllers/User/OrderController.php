@@ -4,7 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\OrderCancellationRequest;
+use App\Http\Requests\OrderStatusRequest;
 use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
@@ -128,7 +128,7 @@ class OrderController extends Controller
      * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(OrderCancellationRequest $request, $shop_order_id)
+    public function update(OrderStatusRequest $request, $shop_order_id)
     {
         $user = $request->user();
         $data = $request->validated();

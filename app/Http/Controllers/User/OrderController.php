@@ -42,38 +42,59 @@ class OrderController extends Controller
      */
     public function store(OrderRequest $request)
     {
-        //create order
         $data = $request->validated();
         $data = $request->safe()->except('pay_mode');
-        $data['user_id'] = $request->user()->id;
+        $user = $request->user();
+        $cartProducts = Cart::getContent();
         $data['total'] = Cart::getTotal();
 
-        $order = Order::create($data);
+        //create order
+        $order = $user->orders()->create($data);
 
-        //create order products
-        $cartProducts = Cart::getContent();
+        $shop_id_array = [];
 
         foreach ($cartProducts as $product) :
-            $order->orderProducts()->create([
-                'product_id' => $product->id,
-                'order_id' => $order->id,
-                'price' => $product->price,
-                'quantity' => $product->quantity
-            ]);
+            $shop_id = $product->attributes->shop_id;
+            array_push($shop_id_array, $shop_id);
+        endforeach;
+
+        $shop_id_array_unique = array_unique($shop_id_array);
+
+        //create shop_orders and order products
+        foreach ($shop_id_array_unique as $shop_id) :
+            $total = 0;
+            
+            foreach ($cartProducts as $product) :
+                if ($product->attributes->shop_id === $shop_id) :
+                    $total += $product->price * $product->quantity;
+                endif;
+            endforeach;
+
+            $shopOrder = $order->shopOrders()->create(['shop_id' => $shop_id, 'total' => $total]);
+
+            foreach ($cartProducts as $product) :
+                if ($product->attributes->shop_id === $shop_id) {
+                    $shopOrder->orderProducts()->create([
+                        'product_id' => $product->id,
+                        'price' => $product->price,
+                        'quantity' => $product->quantity
+                    ]);
+                }
+            endforeach;
         endforeach;
 
         //create transaction
         $pay_mode = $request->pay_mode;
 
         $order->transaction()->create([
-            'user_id' => $request->user()->id,
+            'user_id' => $user->id,
             'pay_mode' => $pay_mode
         ]);
 
         //clear cart
         Cart::clear();
 
-        return $order;
+        return new OrderResource($order);
     }
 
     /**
@@ -107,13 +128,17 @@ class OrderController extends Controller
      * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(OrderCancellationRequest $request, $order_id)
+    public function update(OrderCancellationRequest $request, $shop_order_id)
     {
-        $order = $request->user()->orders()->findOrFail($order_id);
+        $user = $request->user();
+        $data = $request->validated();
+        $status = $data['status'];
 
-        $status = $request->status;
+        $shopOrder = $user->shopOrders()->findOrFail($shop_order_id);
 
-        $order->update(['status' => $status]);
+        $shopOrder->update(['status' => $status]);
+
+        $order = $shopOrder->order;
 
         return new OrderResource($order);
     }

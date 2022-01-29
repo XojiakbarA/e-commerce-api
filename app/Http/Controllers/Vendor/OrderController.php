@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OrderStatusRequest;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\ShopOrderResource;
 use App\Models\Order;
@@ -57,9 +58,18 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(OrderStatusRequest $request, $shop_id, $shop_order_id)
     {
-        //
+        $data = $request->validated();
+        $status = $data['status'];
+
+        $shop = $request->user()->shops()->findOrFail($shop_id);
+
+        $order = $shop->orders()->findOrFail($shop_order_id);
+
+        $order->update(['status' => $status]);
+
+        return new ShopOrderResource($order);
     }
 
     /**

@@ -60,16 +60,34 @@ class OrderController extends Controller
      */
     public function update(OrderStatusRequest $request, $shop_id, $shop_order_id)
     {
-        $data = $request->validated();
-        $status = $data['status'];
-
         $shop = $request->user()->shops()->findOrFail($shop_id);
+        $shopOrder = $shop->orders()->findOrFail($shop_order_id);
 
-        $order = $shop->orders()->findOrFail($shop_order_id);
+        $data = $request->validated();
+        
+        if ($request->has('quantity')) :
+            foreach ($data['quantity'] as $id => $qty) :
+                $shopOrder->orderProducts()->findOrFail($id)->update(['quantity' => $qty]);
+            endforeach;
 
-        $order->update(['status' => $status]);
+            $sub_total = 0;
+            foreach ($shopOrder->orderProducts as $product) :
+                $sub_total += $product->price * $product->quantity;
+            endforeach;
+            $shopOrder->update(['total' => $sub_total]);
 
-        return new ShopOrderResource($order);
+            $total = 0;
+            foreach ($shopOrder->order->orderProducts as $product) :
+                $total += $product->price * $product->quantity;
+            endforeach;
+            $shopOrder->order()->update(['total' => $total]);
+        endif;
+
+        if ($request->has('status')) :
+            $shopOrder->update(['status' => $data['status']]);
+        endif;
+
+        return new ShopOrderResource($shopOrder);
     }
 
     /**

@@ -24,7 +24,8 @@ class OrderStatusRequest extends FormRequest
     public function rules()
     {
         return [
-            'status' => 'in:pending,shipped,delivered,cancelled'
+            'status' => 'nullable|in:pending,shipped,delivered,cancelled',
+            'quantity' => 'nullable|array'
         ];
     }
 }

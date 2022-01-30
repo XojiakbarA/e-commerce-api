@@ -16,13 +16,15 @@ class ShopResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
             'title' => $this->title,
             'rating' => $this->rating,
             'region' => new RegionResource($this->district->region),
             'district' => new DistrictResource($this->district),
             'street' => $this->street,
             'home' => $this->home,
-            'phone_number' => $this->phone_number,
+            'phone' => $this->phone,
             'bg_image_big' => new ShopImageResource($this->bgImageBig),
             'bg_image_small' => new ShopImageResource($this->bgImageSmall),
             'av_image' => new ShopImageResource($this->avImage)

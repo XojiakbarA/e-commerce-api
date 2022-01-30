@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreShopRequest;
+use App\Http\Requests\ShopRequest;
 use App\Http\Resources\ShopResource;
 use App\Models\Shop;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ShopController extends Controller
 {
@@ -28,7 +29,7 @@ class ShopController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreShopRequest $request)
+    public function store(ShopRequest $request)
     {
         $user = $request->user();
         $data = $request->validated();
@@ -91,9 +92,53 @@ class ShopController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ShopRequest $request, $shop_id)
     {
-        //
+        $user = $request->user();
+        $shop = $user->shops()->findOrFail($shop_id);
+        $data = $request->validated();
+        $bg_image = $request->file('bg_image');
+        $av_image = $request->file('av_image');
+
+        if ($bg_image != null) :
+            $imageName = Shop::makeImage($bg_image, 'big_', 1152, 330);
+            
+            if ($shop->bgImageBig) :
+                Storage::delete('public/images/shops/' . $shop->bgImageBig->src);
+                $shop->bgImageBig->update(['src' => $imageName]);
+            else :
+                $shop->bgImageBig()->create(['src' => $imageName, 'status' => 'bg_big']);
+            endif;
+
+            $imageName = Shop::makeImage($bg_image, 'small_', 750, 400);
+
+            if ($shop->bgImageSmall) :
+                Storage::delete('public/images/shops/' . $shop->bgImageSmall->src);
+                $shop->bgImageSmall->update(['src' => $imageName]);
+            else :
+                $shop->bgImageSmall()->create(['src' => $imageName, 'status' => 'bg_small']);
+            endif;
+        endif;
+
+        if ($av_image != null) :
+            $imageName = Shop::makeImage($av_image, null, 200, 200);
+
+            if ($shop->avImage) :
+                Storage::delete('public/images/shops/' . $shop->avImage->src);
+                $shop->avImage->update(['src' => $imageName]);
+            else :
+                $shop->avImage()->create(['src' => $imageName, 'status' => 'avatar']);
+            endif;
+        endif;
+
+        unset($data['bg_image']);
+        unset($data['av_image']);
+
+        $shop->update($data);
+
+        $shop->refresh();
+
+        return new ShopResource($shop);
     }
 
     /**

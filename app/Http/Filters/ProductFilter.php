@@ -2,6 +2,10 @@
 
 namespace App\Http\Filters;
 
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Shop;
+use App\Models\SubCategory;
 use Illuminate\Database\Eloquent\Builder;
 
 class ProductFilter extends AbstractFilter
@@ -78,13 +82,28 @@ class ProductFilter extends AbstractFilter
 
     public function sort(Builder $builder, $value)
     {
-        if ($value == 'new') :
-            $builder->latest();
-        elseif ($value == 'expensive') :
-            $builder->orderBy('price', 'desc');
-        elseif ($value == 'cheap') :
-            $builder->orderBy('price');
-        endif;
+        switch ($value[0]) {
+            case 'category':
+                $category = Category::select('title')->whereColumn('id', 'sub_categories.category_id')->getQuery();
+                $builder->orderBy(SubCategory::selectSub($category, 'title')
+                        ->whereColumn('sub_categories.id', 'products.sub_category_id'), $value[1]);
+                break;
+            case 'sub_category':
+                $builder->orderBy(SubCategory::select('title')
+                        ->whereColumn('sub_categories.id', 'products.sub_category_id'), $value[1]);
+                break;
+            case 'brand':
+                $builder->orderBy(Brand::select('title')
+                        ->whereColumn('brands.id', 'products.brand_id'), $value[1]);
+                break;
+            case 'shop':
+                $builder->orderBy(Shop::select('title')
+                        ->whereColumn('shops.id', 'products.shop_id'), $value[1]);
+                break;
+            default:
+                $builder->orderBy($value[0], $value[1]);
+                break;
+        }
     }
 
     public function priceMin(Builder $builder, $value)

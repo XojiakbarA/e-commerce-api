@@ -30,7 +30,9 @@ class FilterRequest extends FormRequest
             'brand_id' => 'string',
             'rating' => 'string',
             'avail' => 'boolean',
-            'sort' => 'string',
+            'sort' => 'array|between:2,2',
+            'sort.0' => 'string',
+            'sort.1' => 'in:asc,desc',
             'price_min' => 'integer',
             'price_max' => 'integer'
         ];

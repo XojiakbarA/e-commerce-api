@@ -20,7 +20,7 @@ class OrderController extends Controller
     {
         $shop = $request->user()->shops()->findOrFail($shop_id);
 
-        $orders = $shop->orders;
+        $orders = $shop->orders()->paginate(5);
 
         return ShopOrderResource::collection($orders);
     }

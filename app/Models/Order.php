@@ -18,7 +18,7 @@ class Order extends Model
 
     public function orderProducts()
     {
-        return $this->hasManyThrough(OrderProduct::class, ShopOrder::class);
+        return $this->hasManyThrough(OrderProduct::class, SubOrder::class);
     }
 
     public function district()
@@ -26,8 +26,8 @@ class Order extends Model
         return $this->belongsTo(District::class);
     }
 
-    public function shopOrders()
+    public function subOrders()
     {
-        return $this->hasMany(ShopOrder::class);
+        return $this->hasMany(SubOrder::class);
     }
 }

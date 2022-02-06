@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\ShopOrder;
+use App\Models\SubOrder;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ShopOrderPolicy
+class SubOrderPolicy
 {
     use HandlesAuthorization;
 
@@ -25,10 +25,10 @@ class ShopOrderPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\ShopOrder  $shopOrder
+     * @param  \App\Models\SubOrder  $subOrder
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, ShopOrder $shopOrder)
+    public function view(User $user, SubOrder $subOrder)
     {
         //
     }
@@ -48,10 +48,10 @@ class ShopOrderPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\ShopOrder  $shopOrder
+     * @param  \App\Models\SubOrder  $subOrder
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, ShopOrder $shopOrder)
+    public function update(User $user, SubOrder $subOrder)
     {
         //
     }
@@ -60,10 +60,10 @@ class ShopOrderPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\ShopOrder  $shopOrder
+     * @param  \App\Models\SubOrder  $subOrder
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, ShopOrder $shopOrder)
+    public function delete(User $user, SubOrder $subOrder)
     {
         //
     }
@@ -72,10 +72,10 @@ class ShopOrderPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\ShopOrder  $shopOrder
+     * @param  \App\Models\SubOrder  $subOrder
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, ShopOrder $shopOrder)
+    public function restore(User $user, SubOrder $subOrder)
     {
         //
     }
@@ -84,10 +84,10 @@ class ShopOrderPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\ShopOrder  $shopOrder
+     * @param  \App\Models\SubOrder  $subOrder
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, ShopOrder $shopOrder)
+    public function forceDelete(User $user, SubOrder $subOrder)
     {
         //
     }

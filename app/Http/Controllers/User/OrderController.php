@@ -70,11 +70,11 @@ class OrderController extends Controller
                 endif;
             endforeach;
 
-            $shopOrder = $order->shopOrders()->create(['shop_id' => $shop_id, 'total' => $total]);
+            $subOrder = $order->subOrders()->create(['shop_id' => $shop_id, 'total' => $total]);
 
             foreach ($cartProducts as $product) :
                 if ($product->attributes->shop_id === $shop_id) {
-                    $shopOrder->orderProducts()->create([
+                    $subOrder->orderProducts()->create([
                         'product_id' => $product->id,
                         'price' => $product->price,
                         'quantity' => $product->quantity
@@ -128,17 +128,17 @@ class OrderController extends Controller
      * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(OrderStatusRequest $request, $shop_order_id)
+    public function update(OrderStatusRequest $request, $sub_order_id)
     {
         $user = $request->user();
         $data = $request->validated();
         $status = $data['status'];
 
-        $shopOrder = $user->shopOrders()->findOrFail($shop_order_id);
+        $subOrder = $user->subOrders()->findOrFail($sub_order_id);
 
-        $shopOrder->update(['status' => $status]);
+        $subOrder->update(['status' => $status]);
 
-        $order = $shopOrder->order;
+        $order = $subOrder->order;
 
         return new OrderResource($order);
     }

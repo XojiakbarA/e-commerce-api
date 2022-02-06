@@ -17,9 +17,9 @@ class Shop extends Model
         return $this->hasMany(Product::class);
     }
 
-    public function orders()
+    public function subOrders()
     {
-        return $this->hasMany(ShopOrder::class);
+        return $this->hasMany(SubOrder::class);
     }
 
     public function district()

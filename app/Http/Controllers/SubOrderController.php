@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ShopOrder;
+use App\Models\SubOrder;
 use Illuminate\Http\Request;
 
-class ShopOrderController extends Controller
+class SubOrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class ShopOrderController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ShopOrder  $shopOrder
+     * @param  \App\Models\SubOrder  $subOrder
      * @return \Illuminate\Http\Response
      */
-    public function show(ShopOrder $shopOrder)
+    public function show(SubOrder $subOrder)
     {
         //
     }
@@ -52,10 +52,10 @@ class ShopOrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ShopOrder  $shopOrder
+     * @param  \App\Models\SubOrder  $subOrder
      * @return \Illuminate\Http\Response
      */
-    public function edit(ShopOrder $shopOrder)
+    public function edit(SubOrder $subOrder)
     {
         //
     }
@@ -64,10 +64,10 @@ class ShopOrderController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ShopOrder  $shopOrder
+     * @param  \App\Models\SubOrder  $subOrder
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ShopOrder $shopOrder)
+    public function update(Request $request, SubOrder $subOrder)
     {
         //
     }
@@ -75,10 +75,10 @@ class ShopOrderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ShopOrder  $shopOrder
+     * @param  \App\Models\SubOrder  $subOrder
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ShopOrder $shopOrder)
+    public function destroy(SubOrder $subOrder)
     {
         //
     }

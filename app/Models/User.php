@@ -52,9 +52,9 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
-    public function shopOrders()
+    public function subOrders()
     {
-        return $this->hasManyThrough(ShopOrder::class, Order::class);
+        return $this->hasManyThrough(SubOrder::class, Order::class);
     }
 
     public function transactions()

@@ -25,7 +25,7 @@ class OrderResource extends JsonResource
             'home' => $this->home,
             'total' => $this->total,
             'created_at' => $this->created_at->toFormattedDateString(),
-            'order_shops' => ShopOrderResource::collection($this->shopOrders)
+            'order_shops' => SubOrderResource::collection($this->subOrders)
         ];
     }
 }

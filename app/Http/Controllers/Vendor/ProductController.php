@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\ShopResource;
+use App\Models\Image;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -45,14 +46,25 @@ class ProductController extends Controller
         $imageNames = [];
 
         if ($images != null) {
-            $mainImageName = Product::makeImage($images[0], 'main_', 300, 300);
+            $path = 'storage/images/products/';
+
+            $imageName = 'main_' . $images[0]->hashName();
+
+            $src = $path . $imageName;
+
+            Image::makeImage($images[0], $src, 300, 300);
             array_push($imageNames, [
-                'src' => $mainImageName,
+                'src' => $imageName,
                 'main' => 1
             ]);
 
             foreach ($images as $image) :
-                $imageName = Product::makeImage($image, null, 500, 625);
+
+                $imageName = $image->hashName();
+
+                $src = $path . $imageName;
+
+                Image::makeImage($image, $src, 500, 625);
                 array_push($imageNames, [
                     'src' => $imageName,
                     'main' => 0
@@ -108,16 +120,27 @@ class ProductController extends Controller
         if ($images != null) :
             $mainImage = $product->image;
 
+            $path = 'storage/images/products/';
+            
             if (!$mainImage) :
-                $mainImageName = Product::makeImage($images[0], 'main_', 300, 300);
+
+                $imageName = $images[0]->hashName();
+
+                $src = $path . 'main_' . $imageName;
+
+                Image::makeImage($images[0], $src, 300, 300);
                 array_push($imageNames, [
-                    'src' => $mainImageName,
+                    'src' => $imageName,
                     'main' => 1
                 ]);
             endif;
 
             foreach ($images as $image) :
-                $imageName = Product::makeImage($image, null, 500, 625);
+                $imageName = $image->hashName();
+
+                $src = $path . $imageName;
+
+                Image::makeImage($image, $src, 500, 625);
                 array_push($imageNames, [
                     'src' => $imageName,
                     'main' => 0

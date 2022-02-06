@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Intervention\Image\Facades\Image;
 
 class Shop extends Model
 {
@@ -29,34 +28,21 @@ class Shop extends Model
 
     public function AvImage()
     {
-        return $this->hasOne(ShopImage::class)->where('status', 'avatar');
+        return $this->morphOne(Image::class, 'imageable')->where('status', 'avatar');
     }
 
     public function BgImageBig()
     {
-        return $this->hasOne(ShopImage::class)->where('status', 'bg_big');
+        return $this->morphOne(Image::class, 'imageable')->where('status', 'bg_big');
     }
 
     public function BgImageSmall()
     {
-        return $this->hasOne(ShopImage::class)->where('status', 'bg_small');
+        return $this->morphOne(Image::class, 'imageable')->where('status', 'bg_small');
     }
 
     public function images()
     {
-        return $this->hasMany(ShopImage::class);
-    }
-
-    public static function makeImage($image, $prefix, $width, $height)
-    {
-        $imageName = $prefix . $image->hashName();
-
-        $inter = Image::make($image);
-        $inter->fit($width, $height, function($constraint) {
-            $constraint->upsize();
-        });
-        $inter->save('storage/images/shops/' . $imageName);
-
-        return $imageName;
+        return $this->morphMany(Image::class, 'imageable');
     }
 }

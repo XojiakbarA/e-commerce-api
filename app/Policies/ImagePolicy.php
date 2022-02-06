@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\ShopImage;
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ShopImagePolicy
+class ImagePolicy
 {
     use HandlesAuthorization;
 
@@ -25,10 +25,10 @@ class ShopImagePolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\ShopImage  $shopImage
+     * @param  \App\Models\Image  $image
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, ShopImage $shopImage)
+    public function view(User $user, Image $image)
     {
         //
     }
@@ -48,10 +48,10 @@ class ShopImagePolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\ShopImage  $shopImage
+     * @param  \App\Models\Image  $image
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, ShopImage $shopImage)
+    public function update(User $user, Image $image)
     {
         //
     }
@@ -60,10 +60,10 @@ class ShopImagePolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\ShopImage  $shopImage
+     * @param  \App\Models\Image  $image
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, ShopImage $shopImage)
+    public function delete(User $user, Image $image)
     {
         //
     }
@@ -72,10 +72,10 @@ class ShopImagePolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\ShopImage  $shopImage
+     * @param  \App\Models\Image  $image
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, ShopImage $shopImage)
+    public function restore(User $user, Image $image)
     {
         //
     }
@@ -84,10 +84,10 @@ class ShopImagePolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\ShopImage  $shopImage
+     * @param  \App\Models\Image  $image
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, ShopImage $shopImage)
+    public function forceDelete(User $user, Image $image)
     {
         //
     }

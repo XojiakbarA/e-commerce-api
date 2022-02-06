@@ -27,8 +27,8 @@ class ProductResource extends JsonResource
             'sub_category' => new SubCategoryResource($this->subCategory),
             'brand' => new BrandResource($this->brand),
             'shop' => new ShopResource($this->shop),
-            'image' => new ProductImageResource($this->image),
-            'images' => ProductImageResource::collection($this->images)
+            'image' => new ImageResource($this->image),
+            'images' => ImageResource::collection($this->images)
         ];
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\EditUserRequest;
 use App\Http\Resources\UserResource;
+use App\Models\Image;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -59,7 +60,11 @@ class UserController extends Controller
         $image = $request->file('image');
 
         if ($image != null) :
-            $imageName = User::makeImage($image, 300, 300);
+            $path = 'storage/images/users/';
+            $imageName = $image->hashName();
+            $src = $path . $imageName;
+
+            Image::makeImage($image, $src, 300, 300);
 
             if ($user->image) :
                 Storage::delete('public/images/users/' . $user->image->src);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShopRequest;
 use App\Http\Resources\ShopResource;
+use App\Models\Image;
 use App\Models\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -38,14 +39,23 @@ class ShopController extends Controller
 
         $imageNames = [];
 
+        $path = 'storage/images/shops/';
+
         if ($bg_image != null) :
-            $imageName = Shop::makeImage($bg_image, 'big_', 1152, 330);
+
+            $imageName = 'big_' . $bg_image->hashName();
+            $src = $path . $imageName;
+
+            Image::makeImage($bg_image, $src, 1152, 330);
             array_push($imageNames, [
                 'src' => $imageName,
                 'status' => 'bg_big'
             ]);
 
-            $imageName = Shop::makeImage($bg_image, 'small_', 750, 400);
+            $imageName = 'small_' . $bg_image->hashName();
+            $src = $path . $imageName;
+
+            Image::makeImage($bg_image, $src, 750, 400);
             array_push($imageNames, [
                 'src' => $imageName,
                 'status' => 'bg_small'
@@ -53,7 +63,11 @@ class ShopController extends Controller
         endif;
 
         if ($av_image != null) :
-            $imageName = Shop::makeImage($av_image, null, 200, 200);
+
+            $imageName = $av_image->hashName();
+            $src =  $path . $imageName;
+
+            Image::makeImage($av_image, $src, 200, 200);
             array_push($imageNames, [
                 'src' => $imageName,
                 'status' => 'avatar'
@@ -100,8 +114,14 @@ class ShopController extends Controller
         $bg_image = $request->file('bg_image');
         $av_image = $request->file('av_image');
 
+        $path = 'storage/images/shops/';
+
         if ($bg_image != null) :
-            $imageName = Shop::makeImage($bg_image, 'big_', 1152, 330);
+
+            $imageName = 'big_' . $bg_image->hashName();
+            $src = $path . $imageName;
+
+            Image::makeImage($bg_image, $src, 1152, 330);
             
             if ($shop->bgImageBig) :
                 Storage::delete('public/images/shops/' . $shop->bgImageBig->src);
@@ -110,7 +130,10 @@ class ShopController extends Controller
                 $shop->bgImageBig()->create(['src' => $imageName, 'status' => 'bg_big']);
             endif;
 
-            $imageName = Shop::makeImage($bg_image, 'small_', 750, 400);
+            $imageName = 'small_' . $bg_image->hashName();
+            $src = $path . $imageName;
+
+            Image::makeImage($bg_image, $src, 750, 400);
 
             if ($shop->bgImageSmall) :
                 Storage::delete('public/images/shops/' . $shop->bgImageSmall->src);
@@ -121,7 +144,11 @@ class ShopController extends Controller
         endif;
 
         if ($av_image != null) :
-            $imageName = Shop::makeImage($av_image, null, 200, 200);
+
+            $imageName = $av_image->hashName();
+            $src = $path . $imageName;
+
+            Image::makeImage($av_image, $src, 200, 200);
 
             if ($shop->avImage) :
                 Storage::delete('public/images/shops/' . $shop->avImage->src);

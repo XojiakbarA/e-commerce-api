@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Intervention\Image\Facades\Image;
 
 class User extends Authenticatable
 {
@@ -69,18 +68,6 @@ class User extends Authenticatable
 
     public function image()
     {
-        return $this->hasOne(UserImage::class);
-    }
-
-    public static function makeImage($image, $width, $height)
-    {
-        $imageName = $image->hashName();
-        $inter = Image::make($image);
-        $inter->fit($width, $height, function ($constraint) {
-            $constraint->upsize();
-        });
-        $inter->save('storage/images/users/' . $imageName);
-
-        return $imageName;
+        return $this->morphOne(Image::class, 'imageable');
     }
 }

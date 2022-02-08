@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Filters\ProductFilter;
 use App\Http\Requests\Admin\PublishedRequest;
+use App\Http\Requests\ProductFilterRequest;
+use App\Http\Resources\Admin\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -14,9 +17,15 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(ProductFilterRequest $request)
     {
-        //
+        $query = $request->validated();
+        $count = $request->query('count') ?? 9;
+        $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($query)]);
+
+        $products = Product::filter($filter)->latest()->paginate($count);
+
+        return ProductResource::collection($products);
     }
 
     /**

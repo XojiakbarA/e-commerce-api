@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FilterRequest extends FormRequest
+class ProductFilterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,9 +30,9 @@ class FilterRequest extends FormRequest
             'brand_id' => 'string',
             'rating' => 'string',
             'avail' => 'boolean',
-            'sort' => 'array|between:2,2',
-            'sort.0' => 'string',
-            'sort.1' => 'in:asc,desc',
+            'sort_by' => 'array|between:2,2',
+            'sort_by.0' => 'string|in:published,title,stock,price,sale_price,rating,category,brand,shop,created_at',
+            'sort_by.1' => 'string|in:asc,desc',
             'price_min' => 'integer',
             'price_max' => 'integer'
         ];

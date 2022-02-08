@@ -16,7 +16,7 @@ class ProductFilter extends AbstractFilter
     public const BRAND_ID = 'brand_id';
     public const RATING = 'rating';
     public const AVAIL = 'avail';
-    public const SORT = 'sort';
+    public const SORT_BY = 'sort_by';
     public const PRICE_MIN = 'price_min';
     public const PRICE_MAX = 'price_max';
 
@@ -29,7 +29,7 @@ class ProductFilter extends AbstractFilter
             self::BRAND_ID => [$this, 'brandId'],
             self::RATING => [$this, 'rating'],
             self::AVAIL => [$this, 'avail'],
-            self::SORT => [$this, 'sort'],
+            self::SORT_BY => [$this, 'sortBy'],
             self::PRICE_MIN => [$this, 'priceMin'],
             self::PRICE_MAX => [$this, 'priceMax']
         ];
@@ -80,7 +80,7 @@ class ProductFilter extends AbstractFilter
         $builder->get();
     }
 
-    public function sort(Builder $builder, $value)
+    public function sortBy(Builder $builder, $value)
     {
         switch ($value[0]) {
             case 'category':

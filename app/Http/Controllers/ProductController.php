@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Filters\ProductFilter;
-use App\Http\Requests\FilterRequest;
+use App\Http\Requests\ProductFilterRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 
@@ -14,7 +14,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(FilterRequest $request)
+    public function index(ProductFilterRequest $request)
     {
         $query = $request->validated();
         $count = $request->query('count') ?? 9;

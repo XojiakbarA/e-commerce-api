@@ -8,7 +8,6 @@ use App\Http\Resources\ReviewResource;
 use App\Models\Product;
 use App\Models\Review;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
@@ -40,11 +39,10 @@ class ReviewController extends Controller
      */
     public function store(ReviewRequest $request, Product $product)
     {
+        $user = $request->user();
         $data = $request->validated();
 
-        if (Auth::check()) :
-            $data['image'] = Auth::user()->image;
-        endif;
+        $data['user_id'] = $user->id;
 
         $product->reviews()->create($data);
 

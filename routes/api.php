@@ -48,6 +48,8 @@ Route::middleware(['auth:sanctum', 'is_vendor'])->prefix('vendor')->group(functi
 //Admin routes
 Route::middleware(['auth:sanctum', 'is_admin'])->prefix('admin')->group(function() {
     Route::put('products/{product}', [App\Http\Controllers\Admin\ProductController::class, 'update']);
+
+    Route::apiResource('reviews', App\Http\Controllers\Admin\ReviewController::class);
 });
 
 Route::apiResource('products', ProductController::class)->only(['index', 'show']);

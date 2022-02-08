@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\UpdateProductRequest;
+use App\Http\Requests\Admin\PublishedRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -48,7 +48,7 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(PublishedRequest $request, Product $product)
     {
         $data = $request->validated();
 

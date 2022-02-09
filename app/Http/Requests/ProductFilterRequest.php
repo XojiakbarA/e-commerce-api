@@ -34,7 +34,10 @@ class ProductFilterRequest extends FormRequest
             'sort_by.0' => 'string|in:published,title,stock,price,sale_price,rating,category,brand,shop,created_at',
             'sort_by.1' => 'string|in:asc,desc',
             'price_min' => 'integer',
-            'price_max' => 'integer'
+            'price_max' => 'integer',
+            'category_title' => 'string',
+            'brand_title' => 'string',
+            'shop_title' => 'string',
         ];
     }
 }

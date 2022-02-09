@@ -19,6 +19,9 @@ class ProductFilter extends AbstractFilter
     public const SORT_BY = 'sort_by';
     public const PRICE_MIN = 'price_min';
     public const PRICE_MAX = 'price_max';
+    public const CATEGORY_TITLE = 'category_title';
+    public const BRAND_TITLE = 'brand_title';
+    public const SHOP_TITLE = 'shop_title';
 
     protected function getCallbacks(): array
     {
@@ -31,7 +34,10 @@ class ProductFilter extends AbstractFilter
             self::AVAIL => [$this, 'avail'],
             self::SORT_BY => [$this, 'sortBy'],
             self::PRICE_MIN => [$this, 'priceMin'],
-            self::PRICE_MAX => [$this, 'priceMax']
+            self::PRICE_MAX => [$this, 'priceMax'],
+            self::CATEGORY_TITLE => [$this, 'categoryTitle'],
+            self::BRAND_TITLE => [$this, 'brandTitle'],
+            self::SHOP_TITLE => [$this, 'shopTitle'],
         ];
     }
 
@@ -114,5 +120,20 @@ class ProductFilter extends AbstractFilter
     public function priceMax(Builder $builder, $value)
     {
         $builder->where('price', '<', $value);
+    }
+
+    public function categoryTitle(Builder $builder, $value)
+    {
+        $builder->whereRelation('subCategory.category', 'title', 'like', '%' . $value . '%');
+    }
+
+    public function brandTitle(Builder $builder, $value)
+    {
+        $builder->whereRelation('brand', 'title', 'like', '%' . $value . '%');
+    }
+
+    public function shopTitle(Builder $builder, $value)
+    {
+        $builder->whereRelation('shop', 'title', 'like', '%' . $value . '%');
     }
 }

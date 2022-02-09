@@ -16,7 +16,9 @@ class ReviewFilter extends AbstractFilter
     protected function getCallbacks(): array
     {
         return [
-            self::SORT_BY => [$this, 'sortBy']
+            self::SORT_BY => [$this, 'sortBy'],
+            self::USER_NAME => [$this, 'userName'],
+            self::PRODUCT_TITLE => [$this, 'productTitle']
         ];
     }
 
@@ -35,5 +37,15 @@ class ReviewFilter extends AbstractFilter
                 $builder->orderBy($value[0], $value[1]);
                 break;
         }
+    }
+
+    public function userName(Builder $builder, $value)
+    {
+        $builder->whereRelation('user', 'first_name', 'like', '%' . $value . '%');
+    }
+
+    public function productTitle(Builder $builder, $value)
+    {
+        $builder->whereRelation('product', 'title', 'like', '%' . $value . '%');
     }
 }

@@ -24,6 +24,8 @@ class ReviewFilterRequest extends FormRequest
     public function rules()
     {
         return [
+            'user_name' => 'string',
+            'product_title' => 'string',
             'sort_by' => 'array|between:2,2',
             'sort_by.0' => 'string|in:published,text,rating,user_name,product_title,created_at',
             'sort_by.1' => 'string|in:asc,desc'

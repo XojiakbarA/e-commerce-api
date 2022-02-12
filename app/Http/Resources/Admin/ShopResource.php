@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Admin;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,18 +16,16 @@ class ShopResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'first_name' => $this->user->first_name,
-            'last_name' => $this->user->last_name,
             'title' => $this->title,
             'rating' => $this->rating,
-            'region' => new RegionResource($this->district->region),
-            'district' => new DistrictResource($this->district),
+            'first_name' => $this->user->first_name,
+            'last_name' => $this->user->last_name,
+            'region' => $this->district->region->name,
+            'district' => $this->district->name,
             'street' => $this->street,
             'home' => $this->home,
             'phone' => $this->phone,
-            'bg_image_big' => new ImageResource($this->bgImageBig),
-            'bg_image_small' => new ImageResource($this->bgImageSmall),
-            'av_image' => new ImageResource($this->avImage)
+            'av_image' => $this->av_image ? $this->av_image->src : null
         ];
     }
 }

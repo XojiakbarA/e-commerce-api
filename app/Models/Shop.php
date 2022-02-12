@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Shop extends Model
 {
     use HasFactory;
+    use Filterable;
 
     protected $guarded = [];
 
@@ -44,5 +46,10 @@ class Shop extends Model
     public function images()
     {
         return $this->morphMany(Image::class, 'imageable');
+    }
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

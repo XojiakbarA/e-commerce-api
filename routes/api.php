@@ -50,6 +50,7 @@ Route::middleware(['auth:sanctum', 'is_admin'])->prefix('admin')->group(function
     Route::apiResource('products', App\Http\Controllers\Admin\ProductController::class);
     Route::apiResource('reviews', App\Http\Controllers\Admin\ReviewController::class);
     Route::apiResource('users', App\Http\Controllers\Admin\UserController::class);
+    Route::apiResource('shops', \App\Http\Controllers\Admin\ShopController::class);
 });
 
 Route::apiResource('products', ProductController::class)->only(['index', 'show']);

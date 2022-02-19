@@ -53,6 +53,7 @@ Route::middleware(['auth:sanctum', 'is_admin'])->prefix('admin')->group(function
     Route::apiResource('shops', \App\Http\Controllers\Admin\ShopController::class);
     Route::apiResource('orders', \App\Http\Controllers\Admin\OrderController::class);
     Route::apiResource('transactions', \App\Http\Controllers\Admin\TransactionController::class);
+    Route::apiResource('categories', \App\Http\Controllers\Admin\CategoryController::class);
 });
 
 Route::apiResource('products', ProductController::class)->only(['index', 'show']);

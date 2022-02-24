@@ -54,6 +54,7 @@ Route::middleware(['auth:sanctum', 'is_admin'])->prefix('admin')->group(function
     Route::apiResource('orders', \App\Http\Controllers\Admin\OrderController::class);
     Route::apiResource('transactions', \App\Http\Controllers\Admin\TransactionController::class);
     Route::apiResource('categories', \App\Http\Controllers\Admin\CategoryController::class);
+    Route::apiResource('banners', \App\Http\Controllers\Admin\BannerController::class);
 });
 
 Route::apiResource('products', ProductController::class)->only(['index', 'show']);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CategoryRequest;
+use App\Http\Requests\Admin\TitleRequest;
 use App\Http\Resources\Admin\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -57,9 +58,13 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TitleRequest $request, Category $category)
     {
-        //
+        $data = $request->validated();
+
+        $category->update($data);
+
+        return new CategoryResource($category);
     }
 
     /**

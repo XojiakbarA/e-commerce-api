@@ -70,8 +70,12 @@ class SubCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(SubCategory $subCategory)
     {
-        //
+        $deleted = $subCategory->delete();
+
+        if ($deleted) :
+            return response(null, 204);
+        endif;
     }
 }

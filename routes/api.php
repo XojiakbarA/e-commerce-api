@@ -57,6 +57,8 @@ Route::middleware(['auth:sanctum', 'is_admin'])->prefix('admin')->group(function
     Route::apiResource('categories', \App\Http\Controllers\Admin\CategoryController::class);
     Route::apiResource('categories.sub-categories', \App\Http\Controllers\Admin\SubCategoryController::class)->shallow();
     Route::apiResource('banners', \App\Http\Controllers\Admin\BannerController::class);
+    Route::apiResource('regions', \App\Http\Controllers\Admin\RegionController::class);
+    Route::apiResource('regions.districts', \App\Http\Controllers\Admin\DistrictController::class)->shallow();
 });
 
 Route::apiResource('products', ProductController::class)->only(['index', 'show']);

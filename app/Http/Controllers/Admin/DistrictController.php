@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\NameRequest;
 use App\Http\Resources\DistrictResource;
 use App\Models\District;
+use App\Models\Region;
 use Illuminate\Http\Request;
 
 class DistrictController extends Controller
@@ -26,9 +27,13 @@ class DistrictController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NameRequest $request, Region $region)
     {
-        //
+        $data = $request->validated();
+
+        $district = $region->districts()->create($data);
+
+        return new DistrictResource($district);
     }
 
     /**

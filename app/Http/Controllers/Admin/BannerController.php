@@ -28,9 +28,26 @@ class BannerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BannerRequest $request)
     {
-        //
+        $data = $request->validated();
+        $image = $request->file('image');
+
+        unset($data['image']);
+
+        $banner = Banner::create($data);
+
+        if ($image != null) :
+            $imageName = $image->hashName();
+            $path = 'storage/images/banners/';
+            $src = $path . $imageName;
+
+            Image::makeImage($image, $src, 450, 450);
+
+            $banner->image()->create(['src' => $imageName]);
+        endif;
+
+        return new BannerResource($banner);
     }
 
     /**
@@ -81,8 +98,16 @@ class BannerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Banner $banner)
     {
-        //
+        Storage::delete('public/images/banners/' . $banner->image->src);
+
+        $banner->image()->delete();
+
+        $deleted = $banner->delete();
+
+        if ($deleted) :
+            return response(null, 204);
+        endif;
     }
 }

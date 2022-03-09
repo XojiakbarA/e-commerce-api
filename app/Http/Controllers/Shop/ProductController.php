@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Shop;
 
 use App\Http\Controllers\Controller;
 use App\Http\Filters\ProductFilter;
-use App\Http\Requests\FilterRequest;
+use App\Http\Requests\ProductFilterRequest;
 use App\Http\Resources\ProductResource;
-use App\Models\Product;
+use App\Models\Shop;
 
 class ProductController extends Controller
 {
@@ -16,13 +16,13 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(FilterRequest $request, $shop_id)
+    public function __invoke(ProductFilterRequest $request, Shop $shop)
     {
         $query = $request->validated();
 
         $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($query)]);
 
-        $products = Product::filter($filter)->where('shop_id', $shop_id)->latest()->paginate(9);
+        $products = $shop->products()->filter($filter)->latest()->paginate(9);
 
         return ProductResource::collection($products);
     }

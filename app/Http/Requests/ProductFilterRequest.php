@@ -24,6 +24,7 @@ class ProductFilterRequest extends FormRequest
     public function rules()
     {
         return [
+            'id' => 'array',
             'title' => 'string',
             'cat_id' => 'integer',
             'sub_cat_id' => 'integer',

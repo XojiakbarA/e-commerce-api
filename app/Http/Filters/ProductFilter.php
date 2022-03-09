@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ProductFilter extends AbstractFilter
 {
+    public const ID = 'id';
     public const TITLE = 'title';
     public const CAT_ID = 'cat_id';
     public const SUB_CAT_ID = 'sub_cat_id';
@@ -26,6 +27,7 @@ class ProductFilter extends AbstractFilter
     protected function getCallbacks(): array
     {
         return [
+            self::ID => [$this, 'Id'],
             self::TITLE => [$this, 'title'],
             self::CAT_ID => [$this, 'catId'],
             self::SUB_CAT_ID => [$this, 'subCatId'],
@@ -39,6 +41,11 @@ class ProductFilter extends AbstractFilter
             self::BRAND_TITLE => [$this, 'brandTitle'],
             self::SHOP_TITLE => [$this, 'shopTitle'],
         ];
+    }
+
+    public function Id(Builder $builder, $value)
+    {
+        $builder->whereIn('id', $value);
     }
 
     public function title(Builder $builder, $value)

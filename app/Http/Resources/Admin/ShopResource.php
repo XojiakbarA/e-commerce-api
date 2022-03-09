@@ -25,7 +25,7 @@ class ShopResource extends JsonResource
             'street' => $this->street,
             'home' => $this->home,
             'phone' => $this->phone,
-            'av_image' => $this->av_image ? $this->av_image->src : null
+            'av_image' => $this->avImage ? $this->avImage->src : null
         ];
     }
 }

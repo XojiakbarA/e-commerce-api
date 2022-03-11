@@ -30,7 +30,11 @@ class OrderRequest extends FormRequest
             'district_id' => 'required|integer',
             'street' => 'required|string',
             'home' => 'required|string',
-            'pay_mode' => 'in:cod,payme,click,uzcard'
+            'pay_mode' => 'in:cod,payme,click,uzcard',
+            'products' => 'array|min:1|required',
+            'products.*.id' => 'integer',
+            'products.*.quantity' => 'integer',
+            'total' => 'integer|required'
         ];
     }
 }

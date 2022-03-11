@@ -8,7 +8,7 @@ use App\Http\Requests\OrderStatusRequest;
 use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
-use Cart;
+use App\Models\Product;
 
 class OrderController extends Controller
 {
@@ -43,56 +43,51 @@ class OrderController extends Controller
     public function store(OrderRequest $request)
     {
         $data = $request->validated();
-        $data = $request->safe()->except('pay_mode');
+        $data = $request->safe()->except(['pay_mode', 'products']);
+        $cartProducts = $request->products;
+        $cartProductIDs = array_map(fn ($item) => $item['id'], $cartProducts);
+        $baseProducts = Product::find($cartProductIDs)->toArray();
+        $shopIDs = array_map(fn ($item) => $item['shop_id'], $baseProducts);
+        $shopIDs_unique = array_unique($shopIDs);
+        $pay_mode = $request->pay_mode;
         $user = $request->user();
-        $cartProducts = Cart::getContent();
-        $data['total'] = Cart::getTotal();
 
-        //create order
+        // create order
         $order = $user->orders()->create($data);
 
-        $shop_id_array = [];
+        // create sub_orders
+        $products = array_map(function ($item) use ($cartProducts) {
+            $key = array_search($item['id'], array_column($cartProducts, 'id'));
+            return array_merge($item, $cartProducts[$key]);
+        }, $baseProducts);
 
-        foreach ($cartProducts as $product) :
-            $shop_id = $product->attributes->shop_id;
-            array_push($shop_id_array, $shop_id);
-        endforeach;
-
-        $shop_id_array_unique = array_unique($shop_id_array);
-
-        //create shop_orders and order products
-        foreach ($shop_id_array_unique as $shop_id) :
+        foreach ($shopIDs_unique as $shop_id) :
             $total = 0;
             
-            foreach ($cartProducts as $product) :
-                if ($product->attributes->shop_id === $shop_id) :
-                    $total += $product->price * $product->quantity;
+            foreach ($products as $product) :
+                if ($product['shop_id'] === $shop_id) :
+                    $total += ($product['sale_price'] ?? $product['price']) * $product['quantity'];
                 endif;
             endforeach;
 
             $subOrder = $order->subOrders()->create(['shop_id' => $shop_id, 'total' => $total]);
 
-            foreach ($cartProducts as $product) :
-                if ($product->attributes->shop_id === $shop_id) {
+            foreach ($products as $product) :
+                if ($product['shop_id'] === $shop_id) :
                     $subOrder->orderProducts()->create([
-                        'product_id' => $product->id,
-                        'price' => $product->price,
-                        'quantity' => $product->quantity
+                        'product_id' => $product['id'],
+                        'price' => $product['sale_price'] ?? $product['price'],
+                        'quantity' => $product['quantity']
                     ]);
-                }
+                endif;
             endforeach;
         endforeach;
 
         //create transaction
-        $pay_mode = $request->pay_mode;
-
         $order->transaction()->create([
             'user_id' => $user->id,
             'pay_mode' => $pay_mode
         ]);
-
-        //clear cart
-        Cart::clear();
 
         return new OrderResource($order);
     }

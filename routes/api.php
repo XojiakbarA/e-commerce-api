@@ -2,12 +2,10 @@
 
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BrandController;
-use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
-use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\Shop\ShopController;
 use App\Http\Controllers\User\UserController;
@@ -75,13 +73,3 @@ Route::apiResources([
     'regions' => RegionController::class,
     'regions.districts' => DistrictController::class,
 ]);
-
-Route::get('/cart', [CartController::class, 'get']);
-Route::post('/cart/{id}', [CartController::class, 'add']);
-Route::put('/cart/{id}', [CartController::class, 'remove']);
-Route::delete('/cart/{id}', [CartController::class, 'delete']);
-Route::delete('/cart', [CartController::class, 'clear']);
-
-Route::get('/wishlist', [WishlistController::class, 'get']);
-Route::post('/wishlist/{id}', [WishlistController::class, 'add']);
-Route::delete('/wishlist/{id}', [WishlistController::class, 'delete']);

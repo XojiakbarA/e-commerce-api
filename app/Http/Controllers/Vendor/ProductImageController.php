@@ -60,11 +60,9 @@ class ProductImageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $shop_id, $product_id, $image_id)
+    public function destroy(Request $request, $product_id, $image_id)
     {
-        $shop = $request->user()->shops()->findOrFail($shop_id);
-
-        $product = $shop->products()->findOrFail($product_id);
+        $product = $request->user()->products()->findOrFail($product_id);
 
         $productImage = $product->images()->findOrFail($image_id);
 

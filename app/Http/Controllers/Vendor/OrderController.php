@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderStatusRequest;
-use App\Http\Resources\OrderResource;
 use App\Http\Resources\SubOrderResource;
-use App\Models\Order;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -16,13 +14,11 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $shop_id)
+    public function index(Request $request)
     {
-        $shop = $request->user()->shops()->findOrFail($shop_id);
+        $sub_orders = $request->user()->subOrders()->paginate(5);
 
-        $orders = $shop->subOrders()->paginate(5);
-
-        return SubOrderResource::collection($orders);
+        return SubOrderResource::collection($sub_orders);
     }
 
     /**
@@ -42,13 +38,11 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $shop_id, $sub_order_id)
+    public function show(Request $request, $sub_order_id)
     {
-        $shop = $request->user()->shops()->findOrFail($shop_id);
+        $sub_order = $request->user()->subOrders()->findOrFail($sub_order_id);
 
-        $order = $shop->subOrders()->findOrFail($sub_order_id);
-
-        return new SubOrderResource($order);
+        return new SubOrderResource($sub_order);
     }
 
     /**
@@ -58,36 +52,35 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(OrderStatusRequest $request, $shop_id, $sub_order_id)
+    public function update(OrderStatusRequest $request, $sub_order_id)
     {
-        $shop = $request->user()->shops()->findOrFail($shop_id);
-        $subOrder = $shop->subOrders()->findOrFail($sub_order_id);
-
         $data = $request->validated();
-        
+
+        $sub_order = $request->user()->subOrders()->findOrFail($sub_order_id);
+
         if ($request->has('quantity')) :
             foreach ($data['quantity'] as $id => $qty) :
-                $subOrder->orderProducts()->findOrFail($id)->update(['quantity' => $qty]);
+                $sub_order->orderProducts()->findOrFail($id)->update(['quantity' => $qty]);
             endforeach;
 
             $sub_total = 0;
-            foreach ($subOrder->orderProducts as $product) :
+            foreach ($sub_order->orderProducts as $product) :
                 $sub_total += $product->price * $product->quantity;
             endforeach;
-            $subOrder->update(['total' => $sub_total]);
+            $sub_order->update(['total' => $sub_total]);
 
             $total = 0;
-            foreach ($subOrder->order->orderProducts as $product) :
+            foreach ($sub_order->order->orderProducts as $product) :
                 $total += $product->price * $product->quantity;
             endforeach;
-            $subOrder->order()->update(['total' => $total]);
+            $sub_order->order()->update(['total' => $total]);
         endif;
 
         if ($request->has('status')) :
-            $subOrder->update(['status' => $data['status']]);
+            $sub_order->update(['status' => $data['status']]);
         endif;
 
-        return new SubOrderResource($subOrder);
+        return new SubOrderResource($sub_order);
     }
 
     /**

@@ -27,19 +27,12 @@ Route::apiResources(['users' => UserController::class], ['middleware' => 'auth:s
 
 Route::middleware('auth:sanctum')->prefix('user')->group(function() {
     Route::apiResources([
+        'user-images' => App\Http\Controllers\User\UserImageController::class,
         'orders' => App\Http\Controllers\User\OrderController::class,
         'shops' => App\Http\Controllers\User\ShopController::class,
-        'user-images' => App\Http\Controllers\User\UserImageController::class,
-    ]);
-});
-
-// Vendor routes
-Route::middleware(['auth:sanctum', 'is_vendor'])->prefix('vendor')->group(function() {
-    Route::apiResources([
-        'shops' => App\Http\Controllers\User\ShopController::class,
-        'shops.orders' => App\Http\Controllers\Vendor\OrderController::class,
-        'shops.products' => App\Http\Controllers\Vendor\ProductController::class,
-        'shops.products.product-images' => App\Http\Controllers\Vendor\ProductImageController::class,
+        'sub-orders' => App\Http\Controllers\Vendor\OrderController::class,
+        'products' => App\Http\Controllers\Vendor\ProductController::class,
+        'products.product-images' => App\Http\Controllers\Vendor\ProductImageController::class,
     ]);
 });
 

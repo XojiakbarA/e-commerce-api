@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ShopRequest;
 use App\Http\Resources\ShopResource;
 use App\Models\Image;
-use App\Models\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -19,9 +18,9 @@ class ShopController extends Controller
      */
     public function index(Request $request)
     {
-        $shops = $request->user()->shops;
+        $shop = $request->user()->shop;
 
-        return ShopResource::collection($shops);
+        return new ShopResource($shop);
     }
 
     /**
@@ -77,7 +76,7 @@ class ShopController extends Controller
         unset($data['bg_image']);
         unset($data['av_image']);
 
-        $shop = $user->shops()->create($data);
+        $shop = $user->shop()->create($data);
 
         $shop->images()->createMany($imageNames);
 
@@ -94,7 +93,7 @@ class ShopController extends Controller
      */
     public function show(Request $request, $shop_id)
     {
-        $shop = $request->user()->shops()->findOrFail($shop_id);
+        $shop = $request->user()->shop;
 
         return new ShopResource($shop);
     }
@@ -109,7 +108,7 @@ class ShopController extends Controller
     public function update(ShopRequest $request, $shop_id)
     {
         $user = $request->user();
-        $shop = $user->shops()->findOrFail($shop_id);
+        $shop = $user->shop->findOrFail($shop_id);
         $data = $request->validated();
         $bg_image = $request->file('bg_image');
         $av_image = $request->file('av_image');

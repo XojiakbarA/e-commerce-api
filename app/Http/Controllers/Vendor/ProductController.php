@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Vendor;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
-use App\Http\Resources\ShopResource;
 use App\Models\Image;
-use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -18,13 +16,9 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $shop_id)
+    public function index(Request $request)
     {
-        $user = $request->user();
-
-        $shop = $user->shops()->findOrFail($shop_id);
-
-        $products = $shop->products()->latest()->paginate(5);
+        $products = $request->user()->products()->latest()->paginate(5);
 
         return ProductResource::collection($products);
     }
@@ -35,14 +29,11 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductRequest $request, $shop_id)
+    public function store(ProductRequest $request)
     {
-        $user = $request->user();
-        
-        $shop = $user->shops()->findOrfail($shop_id);
-
         $data = $request->validated();
         $images = $request->file('images');
+
         $imageNames = [];
 
         if ($images != null) {
@@ -74,7 +65,7 @@ class ProductController extends Controller
 
         unset($data['images']);
         
-        $product = $shop->products()->create($data);
+        $product = $request->user()->products()->create($data);
         
         $product->images()->createMany($imageNames);
 
@@ -87,13 +78,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $shop_id, $product_id)
+    public function show(Request $request, $product_id)
     {
-        $user = $request->user();
-
-        $shop = $user->shops()->findOrFail($shop_id);
-
-        $product = $shop->products()->findOrFail($product_id);
+        $product = $request->user()->products()->findOrFail($product_id);
 
         return new ProductResource($product);
     }
@@ -105,13 +92,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProductRequest $request, $shop_id, $product_id)
+    public function update(ProductRequest $request, $product_id)
     {
-        $user = $request->user();
-
-        $shop = $user->shops()->findOrfail($shop_id);
-
-        $product = $shop->products()->findOrFail($product_id);
+        $product = $request->user()->products()->findOrFail($product_id);
 
         $data = $request->validated();
         $images = $request->file('images');
@@ -165,11 +148,7 @@ class ProductController extends Controller
      */
     public function destroy(Request $request, $shop_id, $product_id)
     {
-        $user = $request->user();
-
-        $shop = $user->shops()->findOrfail($shop_id);
-
-        $product = $shop->products()->findOrFail($product_id);
+        $product = $request->user()->products()->findOrFail($product_id);
         
         if ($product->image) :
             Storage::delete('public/images/products/' . $product->image->src);
@@ -182,7 +161,5 @@ class ProductController extends Controller
         endif;
 
         $product->delete();
-
-        return new ShopResource($shop);
     }
 }

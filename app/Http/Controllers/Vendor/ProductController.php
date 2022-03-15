@@ -65,7 +65,7 @@ class ProductController extends Controller
 
         unset($data['images']);
         
-        $product = $request->user()->products()->create($data);
+        $product = $request->user()->shop->products()->create($data);
         
         $product->images()->createMany($imageNames);
 
@@ -107,9 +107,9 @@ class ProductController extends Controller
             
             if (!$mainImage) :
 
-                $imageName = $images[0]->hashName();
+                $imageName = 'main_' . $images[0]->hashName();
 
-                $src = $path . 'main_' . $imageName;
+                $src = $path . $imageName;
 
                 Image::makeImage($images[0], $src, 300, 300);
                 array_push($imageNames, [
@@ -146,7 +146,7 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $shop_id, $product_id)
+    public function destroy(Request $request, $product_id)
     {
         $product = $request->user()->products()->findOrFail($product_id);
         

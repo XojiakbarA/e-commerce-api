@@ -60,7 +60,8 @@ class OrderController extends Controller
 
         if ($request->has('quantity')) :
             foreach ($data['quantity'] as $id => $qty) :
-                $sub_order->orderProducts()->findOrFail($id)->update(['quantity' => $qty]);
+                $order_product = $sub_order->orderProducts()->findOrFail($id);
+                $order_product->update(['quantity' => $qty]);
             endforeach;
 
             $sub_total = 0;

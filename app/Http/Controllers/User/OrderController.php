@@ -4,7 +4,6 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\OrderStatusRequest;
 use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
@@ -123,19 +122,9 @@ class OrderController extends Controller
      * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(OrderStatusRequest $request, $sub_order_id)
+    public function update(Request $request)
     {
-        $user = $request->user();
-        $data = $request->validated();
-        $status = $data['status'];
-
-        $subOrder = $user->subOrders()->findOrFail($sub_order_id);
-
-        $subOrder->update(['status' => $status]);
-
-        $order = $subOrder->order;
-
-        return new OrderResource($order);
+        // 
     }
 
     /**

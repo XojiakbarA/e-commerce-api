@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ReviewRequest;
-use App\Http\Resources\ProductResource;
 use App\Http\Resources\ReviewResource;
 use App\Models\Product;
 use App\Models\Review;
@@ -44,9 +43,9 @@ class ReviewController extends Controller
 
         $data['user_id'] = $user->id;
 
-        $product->reviews()->create($data);
+        $review = $product->reviews()->create($data);
 
-        return ReviewResource::collection($product->reviews);
+        return new ReviewResource($review);
     }
 
     /**

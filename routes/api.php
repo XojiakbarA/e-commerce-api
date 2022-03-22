@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->prefix('user')->group(function() {
         'shops' => App\Http\Controllers\User\ShopController::class,
         'sub-orders' => App\Http\Controllers\Vendor\OrderController::class,
         'products' => App\Http\Controllers\Vendor\ProductController::class,
+        'products.reviews' => ReviewController::class,
         'products.product-images' => App\Http\Controllers\Vendor\ProductImageController::class,
     ]);
 });
@@ -62,7 +63,6 @@ Route::apiResources([
     'categories' => CategoryController::class,
     'brands' => BrandController::class,
     'banners' => BannerController::class,
-    'products.reviews' => ReviewController::class,
     'regions' => RegionController::class,
     'regions.districts' => DistrictController::class,
 ]);

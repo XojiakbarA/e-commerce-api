@@ -29,13 +29,11 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryRequest $request)
+    public function store(TitleRequest $request)
     {
         $data = $request->validated();
 
-        $category = Category::create($data['category']);
-
-        $category->subCategories()->createMany($data['sub_categories']);
+        $category = Category::create($data);
 
         return new CategoryResource($category);
     }

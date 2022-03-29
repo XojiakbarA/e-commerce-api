@@ -28,6 +28,7 @@ class ProductResource extends JsonResource
             'brand_title' => $this->brand->title,
             'shop_title' => $this->shop->title,
             'image' => new ImageResource($this->image),
+            'created_at' => $this->created_at->diffForHumans()
         ];
     }
 }

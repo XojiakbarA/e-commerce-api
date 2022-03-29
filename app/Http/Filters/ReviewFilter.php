@@ -2,6 +2,7 @@
 
 namespace App\Http\Filters;
 
+use App\Models\Brand;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,6 +14,7 @@ class ReviewFilter extends AbstractFilter
     public const RATING = 'rating';
     public const TEXT = 'text';
     public const PRODUCT_TITLE = 'product_title';
+    public const PUBLISHED = 'published';
 
     public const SORT_BY = 'sort_by';
 
@@ -24,7 +26,8 @@ class ReviewFilter extends AbstractFilter
             self::USER_NAME => [$this, 'userName'],
             self::RATING => [$this, 'rating'],
             self::TEXT => [$this, 'text'],
-            self::PRODUCT_TITLE => [$this, 'productTitle']
+            self::PRODUCT_TITLE => [$this, 'productTitle'],
+            self::PUBLISHED => [$this, 'published']
         ];
     }
 
@@ -71,5 +74,10 @@ class ReviewFilter extends AbstractFilter
     public function productTitle(Builder $builder, $value)
     {
         $builder->whereRelation('product', 'title', 'like', '%' . $value . '%');
+    }
+
+    public function published(Builder $builder, $value)
+    {
+        $builder->where(self::PUBLISHED, $value);
     }
 }

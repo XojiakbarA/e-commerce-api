@@ -20,7 +20,7 @@ class UserFilter extends AbstractFilter
     {
         return [
             self::FIRST_NAME => [$this, 'firstName'],
-            self::LAST_NAME => [$this, 'last_name'],
+            self::LAST_NAME => [$this, 'lastName'],
             self::EMAIL => [$this, 'email'],
             self::PHONE => [$this, 'phone'],
             self::BIRTH_DATE => [$this, 'birthDate'],

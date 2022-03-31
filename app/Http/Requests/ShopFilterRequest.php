@@ -25,6 +25,7 @@ class ShopFilterRequest extends FormRequest
     {
         return [
             'title' => 'string',
+            'rating' => 'integer',
             'first_name' => 'string',
             'last_name' => 'string',
             'region' => 'string',

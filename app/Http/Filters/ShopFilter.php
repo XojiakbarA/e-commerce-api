@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 class ShopFilter extends AbstractFilter
 {
     public const TITLE = 'title';
+    public const RATING = 'rating';
     public const FIRST_NAME = 'first_name';
     public const LAST_NAME = 'last_name';
     public const REGION = 'region';
@@ -24,8 +25,9 @@ class ShopFilter extends AbstractFilter
     {
         return [
             self::TITLE => [$this, 'title'],
+            self::RATING => [$this, 'rating'],
             self::FIRST_NAME => [$this, 'firstName'],
-            self::LAST_NAME => [$this, 'last_name'],
+            self::LAST_NAME => [$this, 'lastName'],
             self::REGION => [$this, 'region'],
             self::DISTRICT => [$this, 'district'],
             self::STREET => [$this, 'street'],
@@ -64,6 +66,11 @@ class ShopFilter extends AbstractFilter
     public function title(Builder $builder, $value)
     {
         $builder->where(self::TITLE, 'like', '%' . $value . '%');
+    }
+
+    public function rating(Builder $builder, $value)
+    {
+        $builder->where(self::RATING, $value);
     }
 
     public function firstName(Builder $builder, $value)

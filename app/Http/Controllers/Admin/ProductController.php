@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Filters\ProductFilter;
 use App\Http\Requests\Admin\PublishedRequest;
-use App\Http\Requests\ProductFilterRequest;
-use App\Http\Resources\Admin\ProductResource;
+use App\Http\Requests\FilterRequest\ProductFilterRequest;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
 

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Filters\ShopFilter;
-use App\Http\Requests\ShopFilterRequest;
-use App\Http\Resources\Admin\ShopResource;
+use App\Http\Requests\FilterRequest\ShopFilterRequest;
+use App\Http\Resources\ShopResource;
 use App\Models\Shop;
 use Illuminate\Http\Request;
 

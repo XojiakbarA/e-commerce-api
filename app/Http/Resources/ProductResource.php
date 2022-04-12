@@ -29,7 +29,8 @@ class ProductResource extends JsonResource
             'shop' => new ShopResource($this->shop),
             'image' => $this->image ? $this->image->src : null,
             'images' => ImageResource::collection($this->images),
-            'reviews' => ReviewResource::collection($this->reviews)
+            'reviews' => ReviewResource::collection($this->reviews),
+            'created_at' => $this->created_at->diffForHumans()
         ];
     }
 }

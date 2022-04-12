@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Filters\TransactionFilter;
-use App\Http\Requests\TransactionFilterRequest;
-use App\Http\Resources\Admin\TransactionResource;
+use App\Http\Requests\FilterRequest\TransactionFilterRequest;
+use App\Http\Resources\TransactionResource;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 

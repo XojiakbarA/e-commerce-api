@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\OrderStatusRequest;
+use App\Http\Requests\SubOrderRequest;
 use App\Http\Resources\SubOrderResource;
 use Illuminate\Http\Request;
 
@@ -52,7 +52,7 @@ class SubOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(OrderStatusRequest $request, $sub_order_id)
+    public function update(SubOrderRequest $request, $sub_order_id)
     {
         $data = $request->validated();
 

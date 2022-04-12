@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Filters\UserFilter;
-use App\Http\Requests\UserFilterRequest;
-use App\Http\Resources\Admin\UserResource;
-use App\Http\Sorts\UserSort;
+use App\Http\Requests\FilterRequest\UserFilterRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 

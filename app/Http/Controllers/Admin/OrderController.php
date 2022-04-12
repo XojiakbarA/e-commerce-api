@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Filters\OrderFilter;
-use App\Http\Requests\OrderFilterRequest;
-use App\Http\Resources\Admin\OrderResource;
+use App\Http\Requests\FilterRequest\OrderFilterRequest;
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use Illuminate\Http\Request;
 

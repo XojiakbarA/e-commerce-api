@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Filters\ReviewFilter;
 use App\Http\Requests\Admin\PublishedRequest;
-use App\Http\Requests\ReviewFilterRequest;
-use App\Http\Resources\Admin\ReviewResource;
+use App\Http\Requests\FilterRequest\ReviewFilterRequest;
+use App\Http\Resources\ReviewResource;
 use App\Models\Review;
 use Illuminate\Http\Request;
 

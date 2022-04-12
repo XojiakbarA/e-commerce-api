@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\NameRequest;
-use App\Http\Resources\Admin\RegionResource;
+use App\Http\Resources\RegionResource;
 use App\Models\Region;
-use Illuminate\Http\Request;
 
 class RegionController extends Controller
 {

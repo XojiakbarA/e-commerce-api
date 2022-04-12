@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Shop;
 
 use App\Http\Controllers\Controller;
 use App\Http\Filters\ProductFilter;
-use App\Http\Requests\ProductFilterRequest;
+use App\Http\Requests\FilterRequest\ProductFilterRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Shop;
 

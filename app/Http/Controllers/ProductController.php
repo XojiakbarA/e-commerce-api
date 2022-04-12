@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Filters\ProductFilter;
-use App\Http\Requests\ProductFilterRequest;
+use App\Http\Requests\FilterRequest\ProductFilterRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 

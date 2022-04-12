@@ -16,11 +16,12 @@ class ReviewResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->user->first_name,
+            'user_name' => $this->user->first_name,
+            'product_title' => $this->product->title,
+            'user_image' => new ImageResource($this->user->image),
+            'product_image' => new ImageResource($this->product->image),
             'rating' => $this->rating,
             'text' => $this->text,
-            'image' => $this->user->image,
-            // 'product' => new ProductResource($this->product),
             'published' => $this->published,
             'created_at' => $this->created_at->diffForHumans()
         ];

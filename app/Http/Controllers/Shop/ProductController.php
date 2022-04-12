@@ -11,12 +11,11 @@ use App\Models\Shop;
 class ProductController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(ProductFilterRequest $request, Shop $shop)
+    public function index(ProductFilterRequest $request, Shop $shop)
     {
         $query = $request->validated();
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Vendor;
+namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderStatusRequest;
 use App\Http\Resources\SubOrderResource;
 use Illuminate\Http\Request;
 
-class OrderController extends Controller
+class SubOrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,9 +27,9 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $shop_id, $order_id)
+    public function store(Request $request)
     {
-        // 
+        //
     }
 
     /**

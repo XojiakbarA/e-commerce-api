@@ -1,12 +1,26 @@
 <?php
 
+use App\Http\Controllers\Auth\MeController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DistrictController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\RegionController;
-use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ShopController;
+use App\Http\Controllers\ShopProductController;
+use App\Http\Controllers\SubCategoryController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserImageController;
+use App\Http\Controllers\UserOrderController;
+use App\Http\Controllers\UserProductController;
+use App\Http\Controllers\UserReviewController;
+use App\Http\Controllers\UserShopController;
+use App\Http\Controllers\UserSubOrderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,41 +35,36 @@ use Illuminate\Support\Facades\Route;
 */
 
 // User routes
-Route::apiResources(['users' => UserController::class], ['middleware' => 'auth:sanctum']);
+Route::get('/me', MeController::class)->middleware(['auth:sanctum']);
 
-Route::middleware('auth:sanctum')->prefix('user')->group(function() {
-    Route::apiResources([
-        'images' => App\Http\Controllers\User\UserImageController::class,
-        'orders' => App\Http\Controllers\User\OrderController::class,
-        'sub-orders' => App\Http\Controllers\User\SubOrderController::class,
-        'shops' => App\Http\Controllers\User\ShopController::class,
-        'products' => App\Http\Controllers\User\ProductController::class,
-        'products.reviews' => App\Http\Controllers\User\ReviewController::class,
-        'products.images' => App\Http\Controllers\User\ProductImageController::class,
-    ]);
-});
-
-//Admin routes
-Route::middleware(['auth:sanctum', 'is_admin'])->prefix('admin')->group(function() {
-    Route::apiResource('products', App\Http\Controllers\Admin\ProductController::class);
-    Route::apiResource('reviews', App\Http\Controllers\Admin\ReviewController::class);
-    Route::apiResource('users', App\Http\Controllers\Admin\UserController::class);
-    Route::apiResource('shops', \App\Http\Controllers\Admin\ShopController::class);
-    Route::apiResource('orders', \App\Http\Controllers\Admin\OrderController::class);
-    Route::apiResource('transactions', \App\Http\Controllers\Admin\TransactionController::class);
-    Route::apiResource('brands', \App\Http\Controllers\Admin\BrandController::class);
-    Route::apiResource('categories', \App\Http\Controllers\Admin\CategoryController::class);
-    Route::apiResource('categories.sub-categories', \App\Http\Controllers\Admin\SubCategoryController::class)->shallow();
-    Route::apiResource('banners', \App\Http\Controllers\Admin\BannerController::class);
-    Route::apiResource('regions', \App\Http\Controllers\Admin\RegionController::class);
-    Route::apiResource('regions.districts', \App\Http\Controllers\Admin\DistrictController::class)->shallow();
+Route::middleware('auth:sanctum')->group(function() {
+    Route::apiResource('users', UserController::class)->only(['index', 'update']);
+    Route::apiResource('users.images', UserImageController::class)->only(['destroy']);
+    Route::apiResource('users.orders', UserOrderController::class)->shallow()->only(['index', 'store']);
+    Route::apiResource('users.sub-orders', UserSubOrderController::class)->shallow()->only(['index', 'show', 'update']);
+    Route::apiResource('users.shops', UserShopController::class)->shallow()->only(['index', 'store']);
+    Route::apiResource('users.products', UserProductController::class)->shallow()->only(['index', 'store']);
+    Route::apiResource('products.images', ProductImageController::class)->only(['destroy']);
+    Route::apiResource('users.reviews', UserReviewController::class)->shallow()->only(['store']);
+    Route::apiResource('products', ProductController::class)->only(['index', 'show', 'update', 'destroy']);
+    Route::apiResource('reviews', ReviewController::class);
+    Route::apiResource('users', UserController::class);
+    Route::apiResource('shops', ShopController::class)->only(['index', 'show', 'update', 'destroy']);
+    Route::apiResource('orders', OrderController::class);
+    Route::apiResource('transactions', TransactionController::class);
+    Route::apiResource('brands', BrandController::class);
+    Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('categories.sub-categories', SubCategoryController::class)->shallow();
+    Route::apiResource('banners', BannerController::class);
+    Route::apiResource('regions', RegionController::class);
+    Route::apiResource('regions.districts', DistrictController::class)->shallow();
 });
 
 Route::apiResource('products', ProductController::class)->only(['index', 'show']);
 
-Route::apiResource('shops', App\Http\Controllers\Shop\ShopController::class)->only(['index', 'show']);
+Route::apiResource('shops', ShopController::class)->only(['index', 'show']);
 
-Route::apiResource('shops.products', App\Http\Controllers\Shop\ProductController::class)->only(['index']);
+Route::apiResource('shops.products', ShopProductController::class)->only(['index']);
 
 Route::apiResources([
     'categories' => CategoryController::class,

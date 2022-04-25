@@ -1,36 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
-use App\Models\Order;
 use App\Models\Product;
+use App\Models\User;
 
-class OrderController extends Controller
+class UserOrderController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(User $user)
     {
-        $orders = $request->user()->orders()->paginate(5);
+        $orders = $user->orders()->paginate(5);
 
         return OrderResource::collection($orders);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -39,7 +27,7 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(OrderRequest $request)
+    public function store(OrderRequest $request, User $user)
     {
         $data = $request->validated();
         $data = $request->safe()->except(['pay_mode', 'products']);
@@ -49,7 +37,6 @@ class OrderController extends Controller
         $shopIDs = array_map(fn ($item) => $item['shop_id'], $baseProducts);
         $shopIDs_unique = array_unique($shopIDs);
         $pay_mode = $request->pay_mode;
-        $user = $request->user();
 
         // create order
         $order = $user->orders()->create($data);
@@ -89,52 +76,5 @@ class OrderController extends Controller
         ]);
 
         return new OrderResource($order);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request, $order_id)
-    {
-        $order = $request->user()->orders()->findOrFail($order_id);
-
-        return new OrderResource($order);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Order $order)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
-    {
-        // 
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Order $order)
-    {
-        //
     }
 }

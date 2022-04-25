@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Admin\NameRequest;
 use App\Http\Resources\DistrictResource;
 use App\Models\District;
 use App\Models\Region;
-use Illuminate\Http\Request;
 
 class DistrictController extends Controller
 {
@@ -20,24 +20,18 @@ class DistrictController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Region $region)
+    public function store(NameRequest $request, Region $region)
     {
-        //
+        $data = $request->validated();
+
+        $district = $region->districts()->create($data);
+
+        return new DistrictResource($district);
     }
 
     /**
@@ -52,26 +46,19 @@ class DistrictController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\District  $district
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(District $district)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\District  $district
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, District $district)
+    public function update(NameRequest $request, District $district)
     {
-        //
+        $data = $request->validated();
+
+        $district->update($data);
+
+        return new DistrictResource($district);
     }
 
     /**
@@ -82,6 +69,10 @@ class DistrictController extends Controller
      */
     public function destroy(District $district)
     {
-        //
+        $deleted = $district->delete();
+
+        if ($deleted) :
+            return response(null, 204);
+        endif;
     }
 }

@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Shop;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Filters\ProductFilter;
 use App\Http\Requests\FilterRequest\ProductFilterRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Shop;
 
-class ProductController extends Controller
+class ShopProductController extends Controller
 {
     /**
      * Display a listing of the resource.

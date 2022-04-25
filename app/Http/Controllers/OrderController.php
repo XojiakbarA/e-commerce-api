@@ -1,31 +1,29 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Filters\ProductFilter;
-use App\Http\Requests\Admin\PublishedRequest;
-use App\Http\Requests\FilterRequest\ProductFilterRequest;
-use App\Http\Resources\ProductResource;
-use App\Models\Product;
+use App\Http\Filters\OrderFilter;
+use App\Http\Requests\FilterRequest\OrderFilterRequest;
+use App\Http\Resources\OrderResource;
+use App\Models\Order;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ProductFilterRequest $request)
+    public function index(OrderFilterRequest $request)
     {
         $query = $request->validated();
         $count = $request->query('count') ?? 9;
-        $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($query)]);
+        $filter = app()->make(OrderFilter::class, ['queryParams' => array_filter($query)]);
 
-        $products = Product::filter($filter)->latest()->paginate($count);
+        $orders = Order::filter($filter)->paginate($count);
 
-        return ProductResource::collection($products);
+        return OrderResource::collection($orders);
     }
 
     /**
@@ -45,9 +43,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Order $order)
     {
-        //
+        return new OrderResource($order);
     }
 
     /**
@@ -57,13 +55,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PublishedRequest $request, Product $product)
+    public function update(Request $request, $id)
     {
-        $data = $request->validated();
-
-        $updated = $product->update($data);
-
-        return $updated;
+        //
     }
 
     /**

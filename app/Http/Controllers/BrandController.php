@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Admin\TitleRequest;
 use App\Http\Resources\BrandResource;
 use App\Models\Brand;
-use Illuminate\Http\Request;
 
 class BrandController extends Controller
 {
@@ -21,24 +21,18 @@ class BrandController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TitleRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $brand = Brand::create($data);
+
+        return new BrandResource($brand);
     }
 
     /**
@@ -53,26 +47,19 @@ class BrandController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Brand  $brand
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Brand $brand)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Brand  $brand
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Brand $brand)
+    public function update(TitleRequest $request, Brand $brand)
     {
-        //
+        $data = $request->validated();
+
+        $brand->update($data);
+
+        return new BrandResource($brand);
     }
 
     /**
@@ -83,6 +70,10 @@ class BrandController extends Controller
      */
     public function destroy(Brand $brand)
     {
-        //
+        $deleted = $brand->delete();
+
+        if ($deleted) :
+            return response(null, 204);
+        endif;
     }
 }

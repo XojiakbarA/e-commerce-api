@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ReviewRequest;
-use App\Http\Resources\ReviewResource;
-use App\Models\Product;
-use Illuminate\Http\Request;
+use App\Http\Requests\Admin\TitleRequest;
+use App\Http\Resources\SubCategoryResource;
+use App\Models\Category;
+use App\Models\SubCategory;
 
-class ReviewController extends Controller
+class SubCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,16 +25,13 @@ class ReviewController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ReviewRequest $request, Product $product)
+    public function store(TitleRequest $request, Category $category)
     {
-        $user = $request->user();
         $data = $request->validated();
 
-        $data['user_id'] = $user->id;
+        $subCategory = $category->subCategories()->create($data);
 
-        $review = $product->reviews()->create($data);
-
-        return new ReviewResource($review);
+        return new SubCategoryResource($subCategory);
     }
 
     /**
@@ -56,9 +52,13 @@ class ReviewController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TitleRequest $request, SubCategory $subCategory)
     {
-        //
+        $data = $request->validated();
+
+        $subCategory->update($data);
+
+        return new SubCategoryResource($subCategory);
     }
 
     /**
@@ -67,8 +67,12 @@ class ReviewController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(SubCategory $subCategory)
     {
-        //
+        $deleted = $subCategory->delete();
+
+        if ($deleted) :
+            return response(null, 204);
+        endif;
     }
 }

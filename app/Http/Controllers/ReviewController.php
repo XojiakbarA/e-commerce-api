@@ -1,30 +1,30 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Filters\TransactionFilter;
-use App\Http\Requests\FilterRequest\TransactionFilterRequest;
-use App\Http\Resources\TransactionResource;
-use App\Models\Transaction;
+use App\Http\Filters\ReviewFilter;
+use App\Http\Requests\Admin\PublishedRequest;
+use App\Http\Requests\FilterRequest\ReviewFilterRequest;
+use App\Http\Resources\ReviewResource;
+use App\Models\Review;
 use Illuminate\Http\Request;
 
-class TransactionController extends Controller
+class ReviewController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(TransactionFilterRequest $request)
+    public function index(ReviewFilterRequest $request)
     {
-        $query = $request->validated();
+        $query = $request->all();
         $count = $request->query('count') ?? 9;
-        $filter = app()->make(TransactionFilter::class, ['queryParams' => array_filter($query)]);
+        $filter = app()->make(ReviewFilter::class, ['queryParams' => array_filter($query)]);
 
-        $transactions = Transaction::filter($filter)->latest()->paginate($count);
+        $reviews = Review::filter($filter)->latest()->paginate($count);
 
-        return TransactionResource::collection($transactions);
+        return ReviewResource::collection($reviews);
     }
 
     /**
@@ -56,9 +56,13 @@ class TransactionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PublishedRequest $request, Review $review)
     {
-        //
+        $data = $request->validated();
+
+        $updated = $review->update($data);
+
+        return $updated;
     }
 
     /**

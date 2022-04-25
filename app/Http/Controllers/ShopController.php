@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Http\Filters\ShopFilter;
+use App\Http\Requests\FilterRequest\ShopFilterRequest;
 use App\Http\Requests\ShopRequest;
 use App\Http\Resources\ShopResource;
 use App\Models\Image;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -16,11 +18,15 @@ class ShopController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(ShopFilterRequest $request)
     {
-        $shop = $request->user()->shop;
+        $query = $request->validated();
+        $count = $request->query('count') ?? 9;
+        $filter = app()->make(ShopFilter::class, ['queryParams' => array_filter($query)]);
 
-        return new ShopResource($shop);
+        $shops = Shop::filter($filter)->latest()->paginate($count);
+
+        return ShopResource::collection($shops);
     }
 
     /**
@@ -29,60 +35,9 @@ class ShopController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ShopRequest $request)
+    public function store(Request $request)
     {
-        $user = $request->user();
-        $data = $request->validated();
-        $bg_image = $request->file('bg_image');
-        $av_image = $request->file('av_image');
-
-        $imageNames = [];
-
-        $path = 'storage/images/shops/';
-
-        if ($bg_image != null) :
-
-            $imageName = 'big_' . $bg_image->hashName();
-            $src = $path . $imageName;
-
-            Image::makeImage($bg_image, $src, 1152, 330);
-            array_push($imageNames, [
-                'src' => $imageName,
-                'status' => 'bg_big'
-            ]);
-
-            $imageName = 'small_' . $bg_image->hashName();
-            $src = $path . $imageName;
-
-            Image::makeImage($bg_image, $src, 750, 400);
-            array_push($imageNames, [
-                'src' => $imageName,
-                'status' => 'bg_small'
-            ]);
-        endif;
-
-        if ($av_image != null) :
-
-            $imageName = $av_image->hashName();
-            $src =  $path . $imageName;
-
-            Image::makeImage($av_image, $src, 200, 200);
-            array_push($imageNames, [
-                'src' => $imageName,
-                'status' => 'avatar'
-            ]);
-        endif;
-
-        unset($data['bg_image']);
-        unset($data['av_image']);
-
-        $shop = $user->shop()->create($data);
-
-        $shop->images()->createMany($imageNames);
-
-        $user->update(['role' => 'vendor']);
-
-        return new ShopResource($shop);
+        //
     }
 
     /**
@@ -91,10 +46,8 @@ class ShopController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $shop_id)
+    public function show(Shop $shop)
     {
-        $shop = $request->user()->shop;
-
         return new ShopResource($shop);
     }
 
@@ -105,10 +58,8 @@ class ShopController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ShopRequest $request, $shop_id)
+    public function update(ShopRequest $request, Shop $shop)
     {
-        $user = $request->user();
-        $shop = $user->shop->findOrFail($shop_id);
         $data = $request->validated();
         $bg_image = $request->file('bg_image');
         $av_image = $request->file('av_image');

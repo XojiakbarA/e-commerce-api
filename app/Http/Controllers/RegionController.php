@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Region;
+use App\Http\Requests\Admin\NameRequest;
 use App\Http\Resources\RegionResource;
-use Illuminate\Http\Request;
+use App\Models\Region;
 
 class RegionController extends Controller
 {
@@ -21,24 +21,18 @@ class RegionController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NameRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $region = Region::create($data);
+
+        return new RegionResource($region);
     }
 
     /**
@@ -53,26 +47,19 @@ class RegionController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Region  $region
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Region $region)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Region  $region
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Region $region)
+    public function update(NameRequest $request, Region $region)
     {
-        //
+        $data = $request->validated();
+
+        $region->update($data);
+
+        return new RegionResource($region);
     }
 
     /**
@@ -83,6 +70,10 @@ class RegionController extends Controller
      */
     public function destroy(Region $region)
     {
-        //
+        $deleted = $region->delete();
+
+        if ($deleted) :
+            return response(null, 204);
+        endif;
     }
 }

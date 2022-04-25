@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Admin\TitleRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
-use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -36,9 +36,13 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TitleRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $category = Category::create($data);
+
+        return new CategoryResource($category);
     }
 
     /**
@@ -70,9 +74,13 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(TitleRequest $request, Category $category)
     {
-        //
+        $data = $request->validated();
+
+        $category->update($data);
+
+        return new CategoryResource($category);
     }
 
     /**
@@ -83,6 +91,10 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $deleted = $category->delete();
+
+        if ($deleted) :
+            return response(null, 204);
+        endif;
     }
 }

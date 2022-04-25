@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ReviewRequest;
+use App\Http\Requests\Review\StoreRequest;
 use App\Http\Resources\ReviewResource;
 use App\Models\User;
 
@@ -14,7 +14,7 @@ class UserReviewController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ReviewRequest $request, User $user)
+    public function store(StoreRequest $request, User $user)
     {
         $data = $request->validated();
 

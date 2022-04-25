@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProductRequest;
+use App\Http\Requests\Product\StoreRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Image;
 use App\Models\User;
@@ -27,7 +27,7 @@ class UserProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductRequest $request, User $user)
+    public function store(StoreRequest $request, User $user)
     {
         $data = $request->validated();
         $images = $request->file('images');

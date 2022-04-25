@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Review;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ReviewRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,10 @@ class ReviewRequest extends FormRequest
     public function rules()
     {
         return [
-            'product_id' => 'integer|required',
-            'rating' => 'integer|between:0,5|required',
-            'text' => 'string|required'
+            'product_id' => 'integer',
+            'rating' => 'integer|between:0,5',
+            'text' => 'string',
+            'published' => 'boolean'
         ];
     }
 }

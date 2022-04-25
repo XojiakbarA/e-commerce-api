@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Filters\ProductFilter;
-use App\Http\Requests\FilterRequest\ProductFilterRequest;
-use App\Http\Requests\ProductRequest;
+use App\Http\Requests\Product\FilterRequest;
+use App\Http\Requests\Product\UpdateRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Image;
 use App\Models\Product;
@@ -17,7 +17,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ProductFilterRequest $request)
+    public function index(FilterRequest $request)
     {
         $query = $request->validated();
         $count = $request->query('count') ?? 9;
@@ -46,7 +46,7 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProductRequest $request, Product $product)
+    public function update(UpdateRequest $request, Product $product)
     {
         $data = $request->validated();
         $images = $request->file('images');

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\FilterRequest;
+namespace App\Http\Requests\Review;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ReviewFilterRequest extends FormRequest
+class FilterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

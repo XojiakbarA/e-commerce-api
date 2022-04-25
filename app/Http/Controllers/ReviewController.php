@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Filters\ReviewFilter;
-use App\Http\Requests\Admin\PublishedRequest;
-use App\Http\Requests\FilterRequest\ReviewFilterRequest;
+use App\Http\Requests\Review\FilterRequest;
+use App\Http\Requests\Review\UpdateRequest;
 use App\Http\Resources\ReviewResource;
 use App\Models\Review;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ class ReviewController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ReviewFilterRequest $request)
+    public function index(FilterRequest $request)
     {
         $query = $request->all();
         $count = $request->query('count') ?? 9;
@@ -56,7 +56,7 @@ class ReviewController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PublishedRequest $request, Review $review)
+    public function update(UpdateRequest $request, Review $review)
     {
         $data = $request->validated();
 

@@ -16,9 +16,9 @@ class BannerPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(User $user)
+    public function viewAny(?User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -28,9 +28,9 @@ class BannerPolicy
      * @param  \App\Models\Banner  $banner
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Banner $banner)
+    public function view(?User $user, Banner $banner)
     {
-        //
+        return true;
     }
 
     /**
@@ -41,7 +41,7 @@ class BannerPolicy
      */
     public function create(User $user)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -53,7 +53,7 @@ class BannerPolicy
      */
     public function update(User $user, Banner $banner)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -65,7 +65,7 @@ class BannerPolicy
      */
     public function delete(User $user, Banner $banner)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**

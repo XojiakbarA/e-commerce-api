@@ -6,16 +6,27 @@ use App\Http\Requests\SubOrderRequest;
 use App\Http\Resources\SubOrderResource;
 use App\Models\SubOrder;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class UserSubOrderController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum');
+        $this->authorizeResource(SubOrder::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(User $user)
+    public function index(Request $request, User $user)
     {
+        if ($request->user()->id !== $user->id) :
+            abort(403, 'Forbidden');
+        endif;
         $subOrders = $user->subOrders()->paginate(5);
 
         return SubOrderResource::collection($subOrders);

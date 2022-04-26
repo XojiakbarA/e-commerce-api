@@ -16,9 +16,9 @@ class BrandPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(User $user)
+    public function viewAny(?User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -28,9 +28,9 @@ class BrandPolicy
      * @param  \App\Models\Brand  $brand
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Brand $brand)
+    public function view(?User $user, Brand $brand)
     {
-        //
+        return true;
     }
 
     /**
@@ -41,7 +41,7 @@ class BrandPolicy
      */
     public function create(User $user)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -53,7 +53,7 @@ class BrandPolicy
      */
     public function update(User $user, Brand $brand)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -65,7 +65,7 @@ class BrandPolicy
      */
     public function delete(User $user, Brand $brand)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**

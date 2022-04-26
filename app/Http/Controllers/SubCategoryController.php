@@ -9,6 +9,12 @@ use App\Models\SubCategory;
 
 class SubCategoryController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeResource(SubCategory::class);
+    }
+
     /**
      * Display a listing of the resource.
      *

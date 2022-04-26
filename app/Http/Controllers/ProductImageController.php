@@ -4,13 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Image as ModelsImage;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
 class ProductImageController extends Controller
 {
-    public function destroy(Product $product, ModelsImage $image)
+
+    public function __construct()
     {
+        $this->middleware('auth:sanctum');
+        $this->authorizeResource(Image::class);
+    }
+
+    public function destroy(Request $request, Product $product, ModelsImage $image)
+    {
+        if ($product->id !== $image->imageable_id || ($product->shop->user_id !== $request->user()->id && !$request->user()->isAdmin())) :
+            abort(403, 'Forbidden');
+        endif;
+
         $mainImageSrc = $product->image->src;
 
         if ($mainImageSrc === 'main_' . $image->src) :

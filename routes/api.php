@@ -34,42 +34,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// User routes
 Route::get('/me', MeController::class)->middleware(['auth:sanctum']);
 
-Route::middleware('auth:sanctum')->group(function() {
-    Route::apiResource('users', UserController::class)->only(['index', 'update']);
-    Route::apiResource('users.images', UserImageController::class)->only(['destroy']);
-    Route::apiResource('users.orders', UserOrderController::class)->shallow()->only(['index', 'store']);
-    Route::apiResource('users.sub-orders', UserSubOrderController::class)->shallow()->only(['index', 'show', 'update']);
-    Route::apiResource('users.shops', UserShopController::class)->shallow()->only(['index', 'store']);
-    Route::apiResource('users.products', UserProductController::class)->shallow()->only(['index', 'store']);
-    Route::apiResource('products.images', ProductImageController::class)->only(['destroy']);
-    Route::apiResource('users.reviews', UserReviewController::class)->shallow()->only(['store']);
-    Route::apiResource('products', ProductController::class)->only(['index', 'show', 'update', 'destroy']);
-    Route::apiResource('reviews', ReviewController::class);
-    Route::apiResource('users', UserController::class);
-    Route::apiResource('shops', ShopController::class)->only(['index', 'show', 'update', 'destroy']);
-    Route::apiResource('orders', OrderController::class);
-    Route::apiResource('transactions', TransactionController::class);
-    Route::apiResource('brands', BrandController::class);
-    Route::apiResource('categories', CategoryController::class);
-    Route::apiResource('categories.sub-categories', SubCategoryController::class)->shallow();
-    Route::apiResource('banners', BannerController::class);
-    Route::apiResource('regions', RegionController::class);
-    Route::apiResource('regions.districts', DistrictController::class)->shallow();
-});
-
-Route::apiResource('products', ProductController::class)->only(['index', 'show']);
-
-Route::apiResource('shops', ShopController::class)->only(['index', 'show']);
-
+Route::apiResource('products.images', ProductImageController::class)->only(['destroy']);
+Route::apiResource('users.images', UserImageController::class)->only(['destroy']);
+Route::apiResource('users.sub-orders', UserSubOrderController::class)->shallow()->only(['index', 'show', 'update']);
+Route::apiResource('users.orders', UserOrderController::class)->shallow()->only(['index', 'store']);
+Route::apiResource('users.shops', UserShopController::class)->shallow()->only(['index', 'store']);
+Route::apiResource('users.products', UserProductController::class)->shallow()->only(['index', 'store']);
+Route::apiResource('users.reviews', UserReviewController::class)->shallow()->only(['index', 'store']);
+Route::apiResource('products', ProductController::class);
+Route::apiResource('reviews', ReviewController::class);
+Route::apiResource('users', UserController::class);
+Route::apiResource('shops', ShopController::class);
+Route::apiResource('orders', OrderController::class);
+Route::apiResource('transactions', TransactionController::class);
+Route::apiResource('banners', BannerController::class);
+Route::apiResource('regions', RegionController::class);
+Route::apiResource('brands', BrandController::class);
+Route::apiResource('categories', CategoryController::class);
+Route::apiResource('categories.sub-categories', SubCategoryController::class)->shallow();
+Route::apiResource('regions.districts', DistrictController::class)->shallow();
 Route::apiResource('shops.products', ShopProductController::class)->only(['index']);
-
-Route::apiResources([
-    'categories' => CategoryController::class,
-    'brands' => BrandController::class,
-    'banners' => BannerController::class,
-    'regions' => RegionController::class,
-    'regions.districts' => DistrictController::class,
-]);

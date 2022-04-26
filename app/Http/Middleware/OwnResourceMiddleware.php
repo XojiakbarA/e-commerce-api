@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class IsVendorMiddleWare
+class OwnResourceMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,10 +16,10 @@ class IsVendorMiddleWare
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->user()->role === 'vendor') :
+        if ($request->route('user')->id === $request->user()->id) :
             return $next($request);
         else :
-            return response(['message' => 'Forbidden'], 403);
+            return abort(403, 'Forbidden');
         endif;
     }
 }

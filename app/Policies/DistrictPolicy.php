@@ -16,9 +16,9 @@ class DistrictPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(User $user)
+    public function viewAny(?User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -28,9 +28,9 @@ class DistrictPolicy
      * @param  \App\Models\District  $district
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, District $district)
+    public function view(?User $user, District $district)
     {
-        //
+        return true;
     }
 
     /**
@@ -41,7 +41,7 @@ class DistrictPolicy
      */
     public function create(User $user)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -53,7 +53,7 @@ class DistrictPolicy
      */
     public function update(User $user, District $district)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -65,7 +65,7 @@ class DistrictPolicy
      */
     public function delete(User $user, District $district)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**

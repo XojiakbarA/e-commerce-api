@@ -16,9 +16,9 @@ class TransactionPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(User $user)
+    public function viewAny(?User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -28,9 +28,9 @@ class TransactionPolicy
      * @param  \App\Models\Transaction  $transaction
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Transaction $transaction)
+    public function view(?User $user, Transaction $transaction)
     {
-        //
+        return true;
     }
 
     /**
@@ -41,7 +41,7 @@ class TransactionPolicy
      */
     public function create(User $user)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -53,7 +53,7 @@ class TransactionPolicy
      */
     public function update(User $user, Transaction $transaction)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -65,7 +65,7 @@ class TransactionPolicy
      */
     public function delete(User $user, Transaction $transaction)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**

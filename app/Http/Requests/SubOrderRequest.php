@@ -24,8 +24,8 @@ class SubOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'status' => 'nullable|in:pending,shipped,delivered,cancelled',
-            'quantity' => 'nullable|array'
+            'status' => 'in:pending,shipped,delivered,cancelled',
+            'quantity' => 'array'
         ];
     }
 }

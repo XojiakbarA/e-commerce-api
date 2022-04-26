@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Storage;
 
 class ShopController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeResource(Shop::class);
+    }
+
     /**
      * Display a listing of the resource.
      *

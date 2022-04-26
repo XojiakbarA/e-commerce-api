@@ -9,6 +9,13 @@ use App\Models\User;
 
 class UserShopController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum');
+        $this->middleware('own_resource');
+    }
+
     /**
      * Display a listing of the resource.
      *

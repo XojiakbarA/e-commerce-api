@@ -2,11 +2,10 @@
 
 namespace App\Policies;
 
-use App\Models\SubOrder;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class SubOrderPolicy
+class UserPolicy
 {
     use HandlesAuthorization;
 
@@ -25,10 +24,10 @@ class SubOrderPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\SubOrder  $subOrder
+     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(?User $user, SubOrder $subOrder)
+    public function view(?User $user, User $model)
     {
         return true;
     }
@@ -41,41 +40,41 @@ class SubOrderPolicy
      */
     public function create(User $user)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\SubOrder  $subOrder
+     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, SubOrder $subOrder)
+    public function update(User $user, User $model)
     {
-        return $user->isAdmin() || $user->id === $subOrder->shop->user_id;
+        return $user->isAdmin() || $user->id === $model->id;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\SubOrder  $subOrder
+     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, SubOrder $subOrder)
+    public function delete(User $user, User $model)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\SubOrder  $subOrder
+     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, SubOrder $subOrder)
+    public function restore(User $user, User $model)
     {
         //
     }
@@ -84,10 +83,10 @@ class SubOrderPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\SubOrder  $subOrder
+     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, SubOrder $subOrder)
+    public function forceDelete(User $user, User $model)
     {
         //
     }

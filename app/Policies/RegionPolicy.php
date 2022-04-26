@@ -16,9 +16,9 @@ class RegionPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(User $user)
+    public function viewAny(?User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -28,9 +28,9 @@ class RegionPolicy
      * @param  \App\Models\Region  $region
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Region $region)
+    public function view(?User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -41,7 +41,7 @@ class RegionPolicy
      */
     public function create(User $user)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -53,7 +53,7 @@ class RegionPolicy
      */
     public function update(User $user, Region $region)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -65,7 +65,7 @@ class RegionPolicy
      */
     public function delete(User $user, Region $region)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**

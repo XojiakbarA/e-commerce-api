@@ -16,9 +16,9 @@ class SubCategoryPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(User $user)
+    public function viewAny(?User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -28,9 +28,9 @@ class SubCategoryPolicy
      * @param  \App\Models\SubCategory  $subCategory
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, SubCategory $subCategory)
+    public function view(?User $user, SubCategory $subCategory)
     {
-        //
+        return true;
     }
 
     /**
@@ -41,7 +41,7 @@ class SubCategoryPolicy
      */
     public function create(User $user)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -53,7 +53,7 @@ class SubCategoryPolicy
      */
     public function update(User $user, SubCategory $subCategory)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -65,7 +65,7 @@ class SubCategoryPolicy
      */
     public function delete(User $user, SubCategory $subCategory)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**

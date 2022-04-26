@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeResource(Banner::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -56,9 +62,9 @@ class BannerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Banner $banner)
     {
-        //
+        return new BannerResource($banner);
     }
 
     /**

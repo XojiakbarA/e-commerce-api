@@ -8,6 +8,12 @@ use App\Models\Region;
 
 class RegionController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeResource(Region::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -43,7 +49,7 @@ class RegionController extends Controller
      */
     public function show(Region $region)
     {
-        //
+        return new RegionResource($region);
     }
 
     /**

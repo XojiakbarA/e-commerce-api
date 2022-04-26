@@ -16,9 +16,9 @@ class ShopPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(User $user)
+    public function viewAny(?User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -28,9 +28,9 @@ class ShopPolicy
      * @param  \App\Models\Shop  $shop
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Shop $shop)
+    public function view(?User $user, Shop $shop)
     {
-        //
+        return true;
     }
 
     /**
@@ -41,7 +41,7 @@ class ShopPolicy
      */
     public function create(User $user)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -53,7 +53,7 @@ class ShopPolicy
      */
     public function update(User $user, Shop $shop)
     {
-        //
+        return $user->isAdmin() || $user->id === $shop->user_id;
     }
 
     /**
@@ -65,7 +65,7 @@ class ShopPolicy
      */
     public function delete(User $user, Shop $shop)
     {
-        //
+        return $user->isAdmin() || $user->id === $shop->user_id;
     }
 
     /**

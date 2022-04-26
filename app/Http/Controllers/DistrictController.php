@@ -9,6 +9,12 @@ use App\Models\Region;
 
 class DistrictController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeResource(District::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -42,7 +48,7 @@ class DistrictController extends Controller
      */
     public function show(District $district)
     {
-        //
+        return new DistrictResource($district);
     }
 
     /**

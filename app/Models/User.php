@@ -55,7 +55,7 @@ class User extends Authenticatable
 
     public function subOrders()
     {
-        return $this->hasManyThrough(SubOrder::class, Order::class);
+        return $this->hasManyThrough(SubOrder::class, Shop::class);
     }
 
     public function products()
@@ -81,5 +81,15 @@ class User extends Authenticatable
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isVendor()
+    {
+        return $this->role === 'vendor';
     }
 }

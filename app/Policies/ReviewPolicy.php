@@ -16,9 +16,9 @@ class ReviewPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(User $user)
+    public function viewAny(?User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -28,9 +28,9 @@ class ReviewPolicy
      * @param  \App\Models\Review  $review
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Review $review)
+    public function view(?User $user, Review $review)
     {
-        //
+        return true;
     }
 
     /**
@@ -41,7 +41,7 @@ class ReviewPolicy
      */
     public function create(User $user)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -53,7 +53,7 @@ class ReviewPolicy
      */
     public function update(User $user, Review $review)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -65,7 +65,7 @@ class ReviewPolicy
      */
     public function delete(User $user, Review $review)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**

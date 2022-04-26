@@ -10,6 +10,12 @@ use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeResource(Transaction::class);
+    }
+
     /**
      * Display a listing of the resource.
      *

@@ -65,7 +65,7 @@ class ImagePolicy
      */
     public function delete(User $user, Image $image)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**

@@ -8,6 +8,12 @@ use App\Models\Brand;
 
 class BrandController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeResource(Brand::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -43,7 +49,7 @@ class BrandController extends Controller
      */
     public function show(Brand $brand)
     {
-        //
+        return new BrandResource($brand);
     }
 
     /**

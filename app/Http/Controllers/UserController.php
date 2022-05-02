@@ -4,19 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Http\Filters\UserFilter;
 use App\Http\Requests\FilterRequest\UserFilterRequest;
+use App\Http\Requests\User\FilterRequest;
+use App\Http\Requests\User\UpdateRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Image;
 use App\Models\User;
+use App\Services\UserService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
+    protected $service;
 
-    public function __construct()
+    public function __construct(UserService $userService)
     {
         $this->authorizeResource(User::class);
+
+        $this->service = $userService;
     }
 
     /**
@@ -24,7 +30,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(UserFilterRequest $request)
+    public function index(FilterRequest $request)
     {
         $query = $request->validated();
         $count = $request->query('count') ?? 9;
@@ -64,35 +70,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, User $user)
+    public function update(UpdateRequest $request, User $user)
     {
-        $data = $request->validated();
-        $image = $request->file('image');
-
-        if ($image != null) :
-            $path = 'storage/images/users/';
-            $imageName = $image->hashName();
-            $src = $path . $imageName;
-
-            Image::makeImage($image, $src, 300, 300);
-
-            if ($user->image) :
-                Storage::delete('public/images/users/' . $user->image->src);
-                $user->image()->update(['src' => $imageName]);
-            else :
-                $user->image()->create(['src' => $imageName]);
-            endif;
-        endif;
-
-        if ($request->get('birth_date') != null) :
-            $data['birth_date'] = Carbon::parse($data['birth_date'])->setTimezone('Asia/Tashkent')->toDateString();
-        endif;
-
-        unset($data['image']);
-
-        $user->update($data);
-
-        $user->refresh();
+        $user = $this->service->update($request, $user);
 
         return new UserResource($user);
     }

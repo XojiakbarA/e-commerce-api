@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\FilterRequest;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ShopFilterRequest extends FormRequest
+class FilterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,17 +24,14 @@ class ShopFilterRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'string',
-            'rating' => 'integer',
             'first_name' => 'string',
             'last_name' => 'string',
-            'region' => 'string',
-            'district' => 'string',
-            'street' => 'string',
-            'home' => 'string',
+            'email' => 'string',
             'phone' => 'string',
+            'birth_date' => 'date',
+            'role' => 'string',
             'sort_by' => 'array|between:2,2',
-            'sort_by.0' => 'string|in:title,rating,first_name,last_name,region,district,street,home,phone',
+            'sort_by.0' => 'string|in:id,first_name,last_name,email,phone,birth_date,role',
             'sort_by.1' => 'string|in:asc,desc'
         ];
     }

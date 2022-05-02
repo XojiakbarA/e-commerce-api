@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ShopRequest;
+use App\Http\Requests\Shop\StoreRequest;
 use App\Http\Resources\ShopResource;
-use App\Models\Image;
 use App\Models\User;
+use App\Services\ShopService;
 
 class UserShopController extends Controller
 {
+    protected $service;
 
-    public function __construct()
+    public function __construct(ShopService $shopService)
     {
         $this->middleware('auth:sanctum');
         $this->middleware('own_resource');
+
+        $this->service = $shopService;
     }
 
     /**
@@ -34,57 +37,12 @@ class UserShopController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ShopRequest $request, User $user)
+    public function store(StoreRequest $request, User $user)
     {
-        $data = $request->validated();
-        $bg_image = $request->file('bg_image');
-        $av_image = $request->file('av_image');
-
-        $imageNames = [];
-
-        $path = 'storage/images/shops/';
-
-        if ($bg_image != null) :
-
-            $imageName = 'big_' . $bg_image->hashName();
-            $src = $path . $imageName;
-
-            Image::makeImage($bg_image, $src, 1152, 330);
-            array_push($imageNames, [
-                'src' => $imageName,
-                'status' => 'bg_big'
-            ]);
-
-            $imageName = 'small_' . $bg_image->hashName();
-            $src = $path . $imageName;
-
-            Image::makeImage($bg_image, $src, 750, 400);
-            array_push($imageNames, [
-                'src' => $imageName,
-                'status' => 'bg_small'
-            ]);
+        if ($user->shop) :
+            abort(409, 'You have already created a shop. You can create only one shop.');
         endif;
-
-        if ($av_image != null) :
-
-            $imageName = $av_image->hashName();
-            $src =  $path . $imageName;
-
-            Image::makeImage($av_image, $src, 200, 200);
-            array_push($imageNames, [
-                'src' => $imageName,
-                'status' => 'avatar'
-            ]);
-        endif;
-
-        unset($data['bg_image']);
-        unset($data['av_image']);
-
-        $shop = $user->shop()->create($data);
-
-        $shop->images()->createMany($imageNames);
-
-        $user->update(['role' => 'vendor']);
+        $shop = $this->service->store($request, $user);
 
         return new ShopResource($shop);
     }

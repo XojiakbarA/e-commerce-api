@@ -3,20 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Http\Filters\ShopFilter;
-use App\Http\Requests\FilterRequest\ShopFilterRequest;
-use App\Http\Requests\ShopRequest;
+use App\Http\Requests\Shop\FilterRequest;
+use App\Http\Requests\Shop\UpdateRequest;
 use App\Http\Resources\ShopResource;
-use App\Models\Image;
 use App\Models\Shop;
+use App\Services\ShopService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class ShopController extends Controller
 {
+    protected $service;
 
-    public function __construct()
+    public function __construct(ShopService $shopService)
     {
         $this->authorizeResource(Shop::class);
+
+        $this->service = $shopService;
     }
 
     /**
@@ -24,7 +26,7 @@ class ShopController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ShopFilterRequest $request)
+    public function index(FilterRequest $request)
     {
         $query = $request->validated();
         $count = $request->query('count') ?? 9;
@@ -64,62 +66,9 @@ class ShopController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ShopRequest $request, Shop $shop)
+    public function update(UpdateRequest $request, Shop $shop)
     {
-        $data = $request->validated();
-        $bg_image = $request->file('bg_image');
-        $av_image = $request->file('av_image');
-
-        $path = 'storage/images/shops/';
-
-        if ($bg_image != null) :
-
-            $imageName = 'big_' . $bg_image->hashName();
-            $src = $path . $imageName;
-
-            Image::makeImage($bg_image, $src, 1152, 330);
-            
-            if ($shop->bgImageBig) :
-                Storage::delete('public/images/shops/' . $shop->bgImageBig->src);
-                $shop->bgImageBig->update(['src' => $imageName]);
-            else :
-                $shop->bgImageBig()->create(['src' => $imageName, 'status' => 'bg_big']);
-            endif;
-
-            $imageName = 'small_' . $bg_image->hashName();
-            $src = $path . $imageName;
-
-            Image::makeImage($bg_image, $src, 750, 400);
-
-            if ($shop->bgImageSmall) :
-                Storage::delete('public/images/shops/' . $shop->bgImageSmall->src);
-                $shop->bgImageSmall->update(['src' => $imageName]);
-            else :
-                $shop->bgImageSmall()->create(['src' => $imageName, 'status' => 'bg_small']);
-            endif;
-        endif;
-
-        if ($av_image != null) :
-
-            $imageName = $av_image->hashName();
-            $src = $path . $imageName;
-
-            Image::makeImage($av_image, $src, 200, 200);
-
-            if ($shop->avImage) :
-                Storage::delete('public/images/shops/' . $shop->avImage->src);
-                $shop->avImage->update(['src' => $imageName]);
-            else :
-                $shop->avImage()->create(['src' => $imageName, 'status' => 'avatar']);
-            endif;
-        endif;
-
-        unset($data['bg_image']);
-        unset($data['av_image']);
-
-        $shop->update($data);
-
-        $shop->refresh();
+        $shop = $this->service->update($request, $shop);
 
         return new ShopResource($shop);
     }
@@ -130,8 +79,12 @@ class ShopController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Shop $shop)
     {
-        //
+        $deleted = $this->service->destroy($shop);
+
+        if ($deleted) :
+            return response(null, 204);
+        endif;
     }
 }

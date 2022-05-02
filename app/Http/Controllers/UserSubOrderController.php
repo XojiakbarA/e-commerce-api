@@ -6,15 +6,19 @@ use App\Http\Requests\SubOrderRequest;
 use App\Http\Resources\SubOrderResource;
 use App\Models\SubOrder;
 use App\Models\User;
+use App\Services\OrderService;
 use Illuminate\Http\Request;
 
 class UserSubOrderController extends Controller
 {
+    protected $service;
 
-    public function __construct()
+    public function __construct(OrderService $orderService)
     {
         $this->middleware('auth:sanctum');
         $this->authorizeResource(SubOrder::class);
+
+        $this->service = $orderService;
     }
 
     /**
@@ -52,30 +56,7 @@ class UserSubOrderController extends Controller
      */
     public function update(SubOrderRequest $request, SubOrder $subOrder)
     {
-        $data = $request->validated();
-
-        if ($request->has('quantity')) :
-            foreach ($data['quantity'] as $id => $qty) :
-                $order_product = $subOrder->orderProducts()->findOrFail($id);
-                $order_product->update(['quantity' => $qty]);
-            endforeach;
-
-            $sub_total = 0;
-            foreach ($subOrder->orderProducts as $product) :
-                $sub_total += $product->price * $product->quantity;
-            endforeach;
-            $subOrder->update(['total' => $sub_total]);
-
-            $total = 0;
-            foreach ($subOrder->order->orderProducts as $product) :
-                $total += $product->price * $product->quantity;
-            endforeach;
-            $subOrder->order()->update(['total' => $total]);
-        endif;
-
-        if ($request->has('status')) :
-            $subOrder->update(['status' => $data['status']]);
-        endif;
+        $subOrder = $this->service->subOrderUpdate($request, $subOrder);
 
         return new SubOrderResource($subOrder);
     }

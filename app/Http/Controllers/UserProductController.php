@@ -4,16 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Product\StoreRequest;
 use App\Http\Resources\ProductResource;
-use App\Models\Image;
 use App\Models\User;
+use App\Services\ProductService;
 
 class UserProductController extends Controller
 {
+    protected $service;
 
-    public function __construct()
+    public function __construct(ProductService $productService)
     {
         $this->middleware('auth:sanctum');
         $this->middleware('own_resource');
+
+        $this->service = $productService;
     }
 
     /**
@@ -36,43 +39,7 @@ class UserProductController extends Controller
      */
     public function store(StoreRequest $request, User $user)
     {
-        $data = $request->validated();
-        $images = $request->file('images');
-
-        $imageNames = [];
-
-        if ($images != null) {
-            $path = 'storage/images/products/';
-
-            $imageName = 'main_' . $images[0]->hashName();
-
-            $src = $path . $imageName;
-
-            Image::makeImage($images[0], $src, 300, 300);
-            array_push($imageNames, [
-                'src' => $imageName,
-                'main' => 1
-            ]);
-
-            foreach ($images as $image) :
-
-                $imageName = $image->hashName();
-
-                $src = $path . $imageName;
-
-                Image::makeImage($image, $src, 500, 625);
-                array_push($imageNames, [
-                    'src' => $imageName,
-                    'main' => 0
-                ]);
-            endforeach;
-        }
-
-        unset($data['images']);
-        
-        $product = $user->shop->products()->create($data);
-        
-        $product->images()->createMany($imageNames);
+        $product = $this->service->store($request, $user);
 
         return new ProductResource($product);
     }

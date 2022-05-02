@@ -35,11 +35,29 @@ class Product extends Model
 
     public function images()
     {
-        return $this->morphMany(Image::class, 'imageable')->where('main', false);
+        return $this->morphMany(Image::class, 'imageable');
     }
 
-    public function image()
+    public function mainImage()
     {
-        return $this->morphOne(Image::class, 'imageable')->where('main', true);
+        return $this->images()->where('main', true)->first();
+    }
+
+    public function getMainImageAttribute()
+    {
+        if ($this->images) :
+            $mainImage = $this->mainImage();
+
+            if($mainImage) :
+                $urlArr = explode('/', $mainImage->src);
+
+                $index = count($urlArr) - 1;
+
+                array_splice($urlArr, $index, 0, 'main');
+
+                return implode('/', $urlArr);
+            endif;
+        endif;
+        return null;
     }
 }

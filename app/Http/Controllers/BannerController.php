@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Admin\BannerRequest;
+use App\Http\Requests\Banner\StoreRequest;
+use App\Http\Requests\Banner\UpdateRequest;
 use App\Http\Resources\BannerResource;
 use App\Models\Banner;
-use App\Models\Image;
-use Illuminate\Support\Facades\Storage;
+use App\Services\BannerService;
 
 class BannerController extends Controller
 {
+    protected $service;
 
-    public function __construct()
+    public function __construct(BannerService $bannerService)
     {
         $this->authorizeResource(Banner::class);
+
+        $this->service = $bannerService;
     }
 
     /**
@@ -34,24 +37,9 @@ class BannerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(BannerRequest $request)
+    public function store(StoreRequest $request)
     {
-        $data = $request->validated();
-        $image = $request->file('image');
-
-        unset($data['image']);
-
-        $banner = Banner::create($data);
-
-        if ($image != null) :
-            $imageName = $image->hashName();
-            $path = 'storage/images/banners/';
-            $src = $path . $imageName;
-
-            Image::makeImage($image, $src, 450, 450);
-
-            $banner->image()->create(['src' => $imageName]);
-        endif;
+        $banner = $this->service->store($request);
 
         return new BannerResource($banner);
     }
@@ -74,26 +62,9 @@ class BannerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(BannerRequest $request, Banner $banner)
+    public function update(UpdateRequest $request, Banner $banner)
     {
-        $data = $request->validated();
-        $image = $request->file('image');
-
-        if ($image != null) :
-            $imageName = $image->hashName();
-            $path = 'storage/images/banners/';
-            $src = $path . $imageName;
-
-            Image::makeImage($image, $src, 450, 450);
-            
-            Storage::delete('public/images/banners/' . $banner->image->src);
-
-            $banner->image()->update(['src' => $imageName]);
-        endif;
-
-        $banner->update($data);
-
-        $banner->refresh();
+        $banner = $this->service->update($request, $banner);
 
         return new BannerResource($banner);
     }
@@ -106,11 +77,7 @@ class BannerController extends Controller
      */
     public function destroy(Banner $banner)
     {
-        Storage::delete('public/images/banners/' . $banner->image->src);
-
-        $banner->image()->delete();
-
-        $deleted = $banner->delete();
+        $deleted = $this->service->destroy($banner);
 
         if ($deleted) :
             return response(null, 204);

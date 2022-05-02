@@ -4,27 +4,30 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class UserImageController extends Controller
 {
+    protected $service;
 
-    public function __construct()
+    public function __construct(UserService $userService)
     {
         $this->middleware('auth:sanctum');
-        $this->authorizeResource(Image::class);
+
+        $this->service = $userService;
     }
 
     public function destroy(Request $request, User $user, Image $image)
     {
-        if ($user->id !== $image->imageable_id || ($user->id !== $request->user()->id && !$request->user()->isAdmin())) :
+        if ($user->id !== $request->user()->id && !$request->user()->isAdmin()) :
             abort(403, 'Forbidden');
         endif;
+        if ($user->id !== $image->imageable_id) :
+            abort(404, 'Not Found');
+        endif;
 
-        Storage::delete('public/images/users/' . $user->image->src);
-
-        $deleted = $user->image->deleteOrFail();
+        $deleted = $this->service->imageDestroy($user, $image);
 
         if ($deleted) :
             return response(null, 204);

@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\ShopImageController;
 use App\Http\Controllers\ShopProductController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\TransactionController;
@@ -38,6 +39,7 @@ Route::get('/me', MeController::class)->middleware(['auth:sanctum']);
 
 Route::apiResource('products.images', ProductImageController::class)->only(['destroy']);
 Route::apiResource('users.images', UserImageController::class)->only(['destroy']);
+Route::apiResource('shops.images', ShopImageController::class)->only(['destroy']);
 Route::apiResource('users.sub-orders', UserSubOrderController::class)->shallow()->only(['index', 'show', 'update']);
 Route::apiResource('users.orders', UserOrderController::class)->shallow()->only(['index', 'store']);
 Route::apiResource('users.shops', UserShopController::class)->shallow()->only(['index', 'store']);

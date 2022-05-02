@@ -2,56 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Image as ModelsImage;
+use App\Models\Image;
 use App\Models\Product;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
 
 class ProductImageController extends Controller
 {
+    protected $service;
 
-    public function __construct()
+    public function __construct(ProductService $productService)
     {
         $this->middleware('auth:sanctum');
-        $this->authorizeResource(Image::class);
+
+        $this->service = $productService;
     }
 
-    public function destroy(Request $request, Product $product, ModelsImage $image)
+    public function destroy(Request $request, Product $product, Image $image)
     {
-        if ($product->id !== $image->imageable_id || ($product->shop->user_id !== $request->user()->id && !$request->user()->isAdmin())) :
+        if ($request->user->id !== $image->imageable->shop->user_id  && !$request->user->isAdmin()) :
             abort(403, 'Forbidden');
         endif;
-
-        $mainImageSrc = $product->image->src;
-
-        if ($mainImageSrc === 'main_' . $image->src) :
-
-            Storage::delete('public/images/products/' . $mainImageSrc);
-
-            $product->image()->delete();
-
-            $product->refresh();
-
-            $firstImage = $product->images()->first();
-
-            if ($firstImage) :
-                $firstImageSrc = $firstImage->src;
-                $mainImageSrc = 'main_' . $firstImageSrc;
-
-                $inter = Image::make('storage/images/products/' . $firstImageSrc);
-                $inter->fit(300, 300, function ($constraint) {
-                    $constraint->upsize();
-                });
-                $inter->save('storage/images/products/' . $mainImageSrc);
-
-                $product->images()->create(['src' => $mainImageSrc, 'main' => 1]);
-            endif;
+        if ($product->id !== $image->imageable_id) :
+            abort(404, 'Not Found');
         endif;
 
-        Storage::delete('public/images/products/' . $image->src);
-
-        $deleted = $image->delete();
+        $deleted = $this->service->imageDestroy($product, $image);
 
         if ($deleted) :
             return response(null, 204);

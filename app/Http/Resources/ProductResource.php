@@ -27,7 +27,7 @@ class ProductResource extends JsonResource
             'sub_category' => new SubCategoryResource($this->subCategory),
             'brand' => new BrandResource($this->brand),
             'shop' => new ShopResource($this->shop),
-            'image' => $this->image ? $this->image->src : null,
+            'main_image' => $this->main_image,
             'images' => ImageResource::collection($this->images),
             'reviews' => ReviewResource::collection($this->reviews),
             'created_at' => $this->created_at->diffForHumans()
